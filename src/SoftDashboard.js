@@ -89,6 +89,7 @@ const SuiTypography = forwardRef(
 
 
 const SuiBoxRoot = styled(Box)(({ theme, ownerState }) => {
+    console.log({ownerState})
     const { palette, functions, borders, boxShadows } = theme;
     const { variant, bgColor, color, opacity, borderRadius, shadow } = ownerState;
 
@@ -230,6 +231,7 @@ const DashboardLayout = ({children}) => {
 
 
 function MiniStatisticsCard({ bgColor, title, count, percentage, icon, direction }) {
+    console.log({bgColor})
     return (
         <Card>
             <SuiBox bgColor={bgColor} variant="gradient">
@@ -340,6 +342,7 @@ const Dashboard = () => {
                             <Grid item xs={12} sm={5}>
                                 <SuiBox mb={3}>
                                     <MiniStatisticsCard
+                                        bgColor='white'
                                         title={{ text: "today's money", fontWeight: "bold" }}
                                         count="$53,000"
                                         percentage={{ color: "success", text: "+55%" }}
@@ -347,6 +350,7 @@ const Dashboard = () => {
                                     />
                                 </SuiBox>
                                 <MiniStatisticsCard
+                                    bgColor='white'
                                     title={{ text: "today's users", fontWeight: "bold" }}
                                     count="2,300"
                                     percentage={{ color: "success", text: "+3%" }}
@@ -356,6 +360,7 @@ const Dashboard = () => {
                             <Grid item xs={12} sm={5}>
                                 <SuiBox mb={3}>
                                     <MiniStatisticsCard
+                                        bgColor='white'
                                         title={{ text: "new clients", fontWeight: "bold" }}
                                         count="+3,462"
                                         percentage={{ color: "error", text: "-2%" }}
@@ -364,6 +369,7 @@ const Dashboard = () => {
                                 </SuiBox>
                                 <SuiBox mb={3}>
                                     <MiniStatisticsCard
+                                        bgColor='white'
                                         title={{ text: "sales", fontWeight: "bold" }}
                                         count="$103,430"
                                         percentage={{ color: "success", text: "+5%" }}
@@ -385,7 +391,7 @@ const Dashboard = () => {
 export const Sandbox = () => {
     const controller = {
         miniSidenav: false,
-            transparentSidenav: true,
+        transparentSidenav: true,
         sidenavColor: "info",
         transparentNavbar: true,
         fixedNavbar: true,
@@ -395,15 +401,15 @@ export const Sandbox = () => {
     }
     return (
         <Fragment>
+                <ThemeProvider theme={theme}>
+                <CssBaseline />
 
             <PropsContext.Provider value={{
                 controller
             }}>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline />
                     <Dashboard/>
-                </ThemeProvider>
             </PropsContext.Provider>
+            </ThemeProvider>
 
 
 
