@@ -3,6 +3,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import ReactDOM from "react-dom";
 import { Component } from "react";
 import { HashRouter, Route, Link, Switch } from "react-router-dom";
+import SoftDashboard from "./SoftDashboard";
 
 
 const Home = () => {
@@ -18,7 +19,7 @@ class App extends React.Component {
             <div id="wrapper" style={{backgroundColor:'#fffff'}}>
                 <HashRouter>
                     <Switch>
-                        <Route exact path="/" component={Home} />
+                        <Route exact path="/" component={SoftDashboard} />
   
 
                     </Switch>

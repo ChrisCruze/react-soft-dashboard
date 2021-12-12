@@ -10,6 +10,11 @@ module.exports = {
         filename: 'react.js',
         path:"/Users/chriscruz/Documents/Github/Archive/react-build-test/"
     },
+    resolve:{
+        alias:{
+            assets:path.resolve(__dirname,'src/assets/')
+        }
+    },
     module:{
         rules:[
             {
