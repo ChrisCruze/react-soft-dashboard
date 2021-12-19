@@ -2,7 +2,6 @@
 import React, {Fragment, useEffect, useState} from "react";
 import { forwardRef } from "react";
 
-import PropsContext from "./PropsContext";
 
 
 // @mui material components
@@ -11,7 +10,7 @@ import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-
+import Tooltip from "@mui/material/Tooltip"; //required for info card
 
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
@@ -27,7 +26,8 @@ import Typography from "@mui/material/Typography";
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
-
+//required for profile info card
+import { Link } from "react-router-dom";
 
 
 import CssBaseline from "@mui/material/CssBaseline";
@@ -37,6 +37,7 @@ import breakpoints from "./assets/theme/base/breakpoints";
 
 
 
+const PropsContext = React.createContext({});
 
 
 const SuiTypographyRoot = styled(Typography)(({ theme, ownerState }) => {
@@ -437,6 +438,76 @@ const SuiButton = forwardRef(
     )
   );
 
+
+
+
+// Soft UI Dashboard PRO React base styles
+function ProfileInfoCard({ title, description, info, action }) {
+  const labels = [];
+  const values = [];
+
+  // Convert this form `objectKey` of the object key in to this `object key`
+  Object.keys(info).forEach((el) => {
+    if (el.match(/[A-Z\s]+/)) {
+      const uppercaseLetter = Array.from(el).find((i) => i.match(/[A-Z]+/));
+      const newElement = el.replace(uppercaseLetter, ` ${uppercaseLetter.toLowerCase()}`);
+
+      labels.push(newElement);
+    } else {
+      labels.push(el);
+    }
+  });
+
+  // Push the object values into the values array
+  Object.values(info).forEach((el) => values.push(el));
+
+  // Render the card info items
+  const renderItems = labels.map((label, key) => (
+    <SuiBox key={label} display="flex" py={1} pr={2}>
+      <SuiTypography variant="button" fontWeight="bold" textTransform="capitalize">
+        {label}: &nbsp;
+      </SuiTypography>
+      <SuiTypography variant="button" fontWeight="regular" color="text">
+        &nbsp;{values[key]}
+      </SuiTypography>
+    </SuiBox>
+  ));
+
+  // Render the card social media icons
+
+  return (
+    <Card sx={{ height: "100%" }}>
+      <SuiBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
+        <SuiTypography variant="h6" fontWeight="medium" textTransform="capitalize">
+          {title}
+        </SuiTypography>
+        <SuiTypography component={Link} to={action.route} variant="body2" color="secondary">
+          <Tooltip title={action.tooltip} placement="top">
+            <Icon>edit</Icon>
+          </Tooltip>
+        </SuiTypography>
+      </SuiBox>
+      <SuiBox p={2}>
+        <SuiBox mb={2} lineHeight={1}>
+          <SuiTypography variant="button" color="text" fontWeight="regular">
+            {description}
+          </SuiTypography>
+        </SuiBox>
+        <SuiBox opacity={0.3}>
+          <Divider />
+        </SuiBox>
+        <SuiBox>
+          {renderItems}
+          <SuiBox display="flex" py={1} pr={2}>
+            <SuiTypography variant="button" fontWeight="bold" textTransform="capitalize">
+              social: &nbsp;
+            </SuiTypography>
+          </SuiBox>
+        </SuiBox>
+      </SuiBox>
+    </Card>
+  );
+}
   
 function AutomotiveDetails() {
     return (
@@ -665,12 +736,38 @@ const Dashboard = () => {
     const { values } = breakpoints;
     const { size } = typography;
     return (
-        <Fragment><DashboardLayout>
+        <Fragment>
+          <DashboardLayout>
                   <SuiBox pt={3}>
         <SuiBox mb={3}>
           <AutomotiveDetails />
         </SuiBox>
         </SuiBox>
+        
+
+
+
+
+        <SuiBox mt={5} mb={3}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6} xl={4}>
+            <ProfileInfoCard
+              title="profile information"
+              description="Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+              info={{
+                fullName: "Alec M. Thompson",
+                mobile: "(44) 123 1234 123",
+                email: "alecthompson@mail.com",
+                location: "USA",
+              }}
+              action={{ route: "", tooltip: "Edit Profile" }}
+            />
+          </Grid>
+        </Grid>
+      </SuiBox>
+
+
+
             <SuiBox py={3}>
                 <Grid container>
                     <Grid item xs={12} lg={7}>
