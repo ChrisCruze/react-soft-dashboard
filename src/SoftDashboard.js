@@ -11,6 +11,7 @@ import Icon from "@mui/material/Icon";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip"; //required for info card
+import Avatar from "@mui/material/Avatar";//required for events card
 
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
@@ -34,6 +35,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import typography from "./assets/theme/base/typography";
 import breakpoints from "./assets/theme/base/breakpoints";
+
+//used for teams card
+import logoSlack from "assets/images/small-logos/logo-slack.svg";
 
 
 
@@ -439,7 +443,147 @@ const SuiButton = forwardRef(
   );
 
 
+const SuiAvatarRoot = styled(Avatar)(({ theme, ownerState }) => {
+  console.log({avatarTheme: theme})
+    const { palette, functions, typography, boxShadows } = theme;
+    const { shadow, bgColor, size } = ownerState;
+  
+    const { gradients, transparent } = palette;
+    const { pxToRem, linearGradient } = functions;
+    const { size: fontSize, fontWeightBold } = typography;
+    console.log({transparent,bgColor})
+    // backgroundImage value
+    const backgroundValue =
+      bgColor === "transparent"
+        ? transparent.main
+        : linearGradient(gradients[bgColor].main, gradients[bgColor].state);
+  
+    // size value
+    let sizeValue;
+  
+    switch (size) {
+      case "xs":
+        sizeValue = {
+          width: pxToRem(24),
+          height: pxToRem(24),
+          fontSize: fontSize.xs,
+        };
+        break;
+      case "sm":
+        sizeValue = {
+          width: pxToRem(36),
+          height: pxToRem(36),
+          fontSize: fontSize.sm,
+        };
+        break;
+      case "lg":
+        sizeValue = {
+          width: pxToRem(58),
+          height: pxToRem(58),
+          fontSize: fontSize.sm,
+        };
+        break;
+      case "xl":
+        sizeValue = {
+          width: pxToRem(74),
+          height: pxToRem(74),
+          fontSize: fontSize.md,
+        };
+        break;
+      case "xxl":
+        sizeValue = {
+          width: pxToRem(110),
+          height: pxToRem(110),
+          fontSize: fontSize.md,
+        };
+        break;
+      default: {
+        sizeValue = {
+          width: pxToRem(48),
+          height: pxToRem(48),
+          fontSize: fontSize.md,
+        };
+      }
+    }
+  
+    return {
+      background: backgroundValue,
+      fontWeight: fontWeightBold,
+      boxShadow: boxShadows[shadow],
+      ...sizeValue,
+    };
+  });
 
+  const SuiAvatar = forwardRef(({ bgColor, size, shadow, ...rest }, ref) => (
+    <SuiAvatarRoot ref={ref} ownerState={{ shadow, bgColor, size }} {...rest} />
+  ));
+
+  function EventCard({ id, image, title, dateTime, description, action }) {
+    console.log({image})
+    return (
+      <Card>
+        <SuiBox p={2}>
+          <SuiBox display="flex" alignItems="center">
+            <SuiAvatar theme={theme} bgColor={"light"} src={image} alt={title} size="lg" variant="rounded" />
+            <SuiBox ml={1} lineHeight={0}>
+              <SuiTypography variant="h6" fontWeight="medium" textTransform="capitalize">
+                {title}
+              </SuiTypography>
+              {dateTime ? (
+                <SuiTypography
+                  variant="caption"
+                  fontWeight="regular"
+                  color="text"
+                  textTransform="capitalize"
+                >
+                  {dateTime}
+                </SuiTypography>
+              ) : null}
+            </SuiBox>
+          </SuiBox>
+          <SuiBox my={2}>
+            <SuiTypography variant="body2" color="text">
+              {description}
+            </SuiTypography>
+          </SuiBox>
+          {id ? (
+            <SuiBox>
+              <SuiTypography component="span" variant="body2" fontWeight="bold" color="text">
+                Meeting ID:&nbsp;
+              </SuiTypography>
+              <SuiTypography component="span" variant="body2" color="text">
+                {id}
+              </SuiTypography>
+            </SuiBox>
+          ) : null}
+          <Divider />
+          <SuiBox display="flex" justifyContent="space-between" alignItems="center">
+            {action.type === "internal" ? (
+              <SuiButton
+                component={Link}
+                to={action.route}
+                variant="gradient"
+                color={action.color}
+                size="small"
+              >
+                {action.label}
+              </SuiButton>
+            ) : (
+              <SuiButton
+                component="a"
+                href={action.route}
+                variant="gradient"
+                color={action.color}
+                size="small"
+              >
+                {action.label}
+              </SuiButton>
+            )}
+          </SuiBox>
+        </SuiBox>
+      </Card>
+    );
+  }
 
 // Soft UI Dashboard PRO React base styles
 function ProfileInfoCard({ title, description, info, action }) {
@@ -745,7 +889,24 @@ const Dashboard = () => {
         </SuiBox>
         
 
-
+        <SuiBox mb={3}>
+        <Grid container spacing={3}>
+        <Grid item xs={12} lg={4}>
+        <Grid item xs={12}>
+              <SuiBox mb={3}>
+                <EventCard
+                  id="902-128-281"
+                  image={logoSlack}
+                  title="slack meet"
+                  dateTime="11:00 AM"
+                  description="You have an upcoming meet for Marketing Planning"
+                  action={{ type: "internal", route: "/", color: "success", label: "join" }}
+                />
+              </SuiBox>
+            </Grid>
+            </Grid>
+            </Grid>
+            </SuiBox>
 
 
         <SuiBox mt={5} mb={3}>
@@ -854,6 +1015,7 @@ export const Sandbox = () => {
         direction: "ltr",
         layout: "dashboard",
     }
+    console.log({theme})
     return (
         <Fragment>
                 <ThemeProvider theme={theme}>
