@@ -53,6 +53,8 @@ import {
 	ProfileInfoCard,
 	AutomotiveDetails,
 	MiniStatisticsCard,
+	ComplexProjectCard,
+	PlaceholderCard,
 } from "./SoftElements";
 
 function EventCard({ id, image, title, dateTime, description, action }) {
@@ -161,6 +163,50 @@ const Dashboard = () => {
 					</SuiBox>
 				</SuiBox>
 
+				<SuiBox pt={5} pb={2}>
+					<Grid container>
+						<Grid item xs={12} md={8}>
+							<SuiBox mb={1}>
+								<SuiTypography variant="h5">
+									Some of Our Awesome Projects
+								</SuiTypography>
+							</SuiBox>
+							<SuiBox mb={2}>
+								<SuiTypography variant="body2" color="text">
+									This is the paragraph where you can write
+									more details about your projects. Keep you
+									user engaged by providing meaningful
+									information.
+								</SuiTypography>
+							</SuiBox>
+						</Grid>
+					</Grid>
+					<SuiBox mt={{ xs: 1, lg: 3 }} mb={1}>
+						<Grid container spacing={3}>
+							<Grid item xs={12} md={6} lg={4}>
+								<ComplexProjectCard
+									image={logoSlack}
+									color={"dark"}
+									title="slack bot"
+									description="If everything I did failed - which it doesn't, I think that it actually succeeds."
+									dateTime="02.03.22"
+									members={[]}
+									dropdown={{}}
+								/>
+							</Grid>
+
+							<Grid item xs={12} md={6} lg={4}>
+								<PlaceholderCard
+									title={{
+										variant: "h5",
+										text: "New project",
+									}}
+									icon={"add"}
+								/>
+							</Grid>
+						</Grid>
+					</SuiBox>
+				</SuiBox>
 				<SuiBox mb={3}>
 					<Grid container spacing={3}>
 						<Grid item xs={12} lg={4}>

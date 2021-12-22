@@ -134,6 +134,16 @@ export const SuiTypography = forwardRef(
 	)
 );
 
+// Setting default values for the props of SuiTypography
+SuiTypography.defaultProps = {
+	color: "dark",
+	fontWeight: false,
+	textTransform: "none",
+	verticalAlign: "unset",
+	textGradient: false,
+	opacity: 1,
+};
+
 const SuiBoxRoot = styled(Box)(({ theme, ownerState }) => {
 	const { palette, functions, borders, boxShadows } = theme;
 	const { variant, bgColor, color, opacity, borderRadius, shadow } =
@@ -257,6 +267,16 @@ export const SuiBox = forwardRef(
 		/>
 	)
 );
+
+// Setting default values for the props of SuiBox
+SuiBox.defaultProps = {
+	variant: "contained",
+	bgColor: "transparent",
+	color: "dark",
+	opacity: 1,
+	borderRadius: "none",
+	shadow: "none",
+};
 
 const SuiButtonRoot = styled(Button)(({ theme, ownerState }) => {
 	const { palette, functions, borders } = theme;
@@ -497,6 +517,14 @@ export const SuiButton = forwardRef(
 		</SuiButtonRoot>
 	)
 );
+// Setting default values for the props of SuiButton
+SuiButton.defaultProps = {
+	size: "medium",
+	variant: "contained",
+	color: "white",
+	circular: false,
+	iconOnly: false,
+};
 
 const SuiAvatarRoot = styled(Avatar)(({ theme, ownerState }) => {
 	console.log({ avatarTheme: theme });
@@ -578,6 +606,12 @@ export const SuiAvatar = forwardRef(
 		/>
 	)
 );
+// Setting default values for the props of SuiAvatar
+SuiAvatar.defaultProps = {
+	bgColor: "transparent",
+	size: "md",
+	shadow: "none",
+};
 
 function EventCard({ id, image, title, dateTime, description, action }) {
 	console.log({ image });
@@ -810,6 +844,73 @@ export function ProfileInfoCard({ title, description, info, action }) {
 				>
 					{title}
 				</SuiTypography>
+			</SuiBox>
+			<SuiBox p={2}>
+				<SuiBox>{renderItems}</SuiBox>
+			</SuiBox>
+		</Card>
+	);
+}
+
+// Soft UI Dashboard PRO React base styles
+export function ProfileInfoCardOriginal({ title, description, info, action }) {
+	const labels = [];
+	const values = [];
+
+	// Convert this form `objectKey` of the object key in to this `object key`
+	Object.keys(info).forEach((el) => {
+		if (el.match(/[A-Z\s]+/)) {
+			const uppercaseLetter = Array.from(el).find((i) =>
+				i.match(/[A-Z]+/)
+			);
+			const newElement = el.replace(
+				uppercaseLetter,
+				` ${uppercaseLetter.toLowerCase()}`
+			);
+
+			labels.push(newElement);
+		} else {
+			labels.push(el);
+		}
+	});
+
+	// Push the object values into the values array
+	Object.values(info).forEach((el) => values.push(el));
+
+	// Render the card info items
+	const renderItems = labels.map((label, key) => (
+		<SuiBox key={label} display="flex" py={1} pr={2}>
+			<SuiTypography
+				variant="button"
+				fontWeight="bold"
+				textTransform="capitalize"
+			>
+				{label}: &nbsp;
+			</SuiTypography>
+			<SuiTypography variant="button" fontWeight="regular" color="text">
+				&nbsp;{values[key]}
+			</SuiTypography>
+		</SuiBox>
+	));
+
+	// Render the card social media icons
+
+	return (
+		<Card sx={{ height: "100%" }}>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+				pt={2}
+				px={2}
+			>
+				<SuiTypography
+					variant="h6"
+					fontWeight="medium"
+					textTransform="capitalize"
+				>
+					{title}
+				</SuiTypography>
 				<SuiTypography
 					component={Link}
 					to={action.route}
@@ -851,6 +952,282 @@ export function ProfileInfoCard({ title, description, info, action }) {
 	);
 }
 
+export function PlaceholderCard({ icon, title, hasBorder, outlined }) {
+	return (
+		<Card
+			raised
+			sx={({ borders: { borderWidth, borderColor } }) => ({
+				height: "100%",
+				backgroundColor: outlined && "transparent",
+				boxShadow: outlined && "none",
+				border:
+					hasBorder || outlined
+						? `${borderWidth[1]} solid ${borderColor}`
+						: "none",
+			})}
+		>
+			<SuiBox
+				display="flex"
+				flexDirection="column"
+				justifyContent="center"
+				textAlign="center"
+				height="100%"
+				p={3}
+			>
+				<SuiBox color="secondary" mb={0.5}>
+					<Icon fontSize="default" sx={{ fontWeight: "bold" }}>
+						{icon}
+					</Icon>
+				</SuiBox>
+				<SuiTypography variant={title.variant} color="secondary">
+					{title.text}
+				</SuiTypography>
+			</SuiBox>
+		</Card>
+	);
+}
+// Setting default values for the props of PlaceholderCard
+PlaceholderCard.defaultProps = {
+	icon: "add",
+	hasBorder: false,
+	outlined: false,
+};
+
+// Custom styles for ComplexProjectCard
+export function ComplexProjectCardOriginal({
+	color,
+	image,
+	title,
+	dateTime,
+	description,
+	members,
+	dropdown,
+}) {
+	const renderMembers = members.map((member, key) => {
+		const memberKey = `member-${key}`;
+
+		return (
+			<SuiAvatar
+				key={memberKey}
+				src={member}
+				alt="member profile"
+				size="xs"
+				sx={({ borders: { borderWidth }, palette: { white } }) => ({
+					border: `${borderWidth[2]} solid ${white.main}`,
+					cursor: "pointer",
+					position: "relative",
+
+					"&:not(:first-of-type)": {
+						ml: -1.25,
+					},
+
+					"&:hover, &:focus": {
+						zIndex: "10",
+					},
+				})}
+			/>
+		);
+	});
+
+	return (
+		<Card>
+			<SuiBox p={2}>
+				<SuiBox display="flex" alignItems="center">
+					<SuiAvatar
+						src={image}
+						alt={title}
+						size="xl"
+						variant="rounded"
+						bgColor={color}
+						sx={{ p: 1 }}
+					/>
+					<SuiBox ml={2} lineHeight={0}>
+						<SuiBox mb={1} lineHeight={0}>
+							<SuiTypography
+								variant="h6"
+								textTransform="capitalize"
+								fontWeight="medium"
+							>
+								{title}
+							</SuiTypography>
+						</SuiBox>
+						{members.length > -1 ? (
+							<SuiBox display="flex">{renderMembers}</SuiBox>
+						) : null}
+					</SuiBox>
+					{dropdown && (
+						<SuiTypography
+							color="secondary"
+							onClick={dropdown.action}
+							sx={{
+								ml: "auto",
+								alignSelf: "flex-start",
+								py: 1.25,
+							}}
+						>
+							<Icon fontSize="default" sx={{ cursor: "pointer" }}>
+								more_vert
+							</Icon>
+						</SuiTypography>
+					)}
+					{dropdown.menu}
+				</SuiBox>
+				<SuiBox my={2} lineHeight={1}>
+					<SuiTypography
+						variant="button"
+						fontWeight="regular"
+						color="text"
+					>
+						{description}
+					</SuiTypography>
+				</SuiBox>
+				<Divider />
+				<SuiBox
+					display="flex"
+					justifyContent="space-between"
+					alignItems="center"
+				>
+					{members.length > -1 ? (
+						<SuiBox
+							display="flex"
+							flexDirection="column"
+							lineHeight={0}
+						>
+							<SuiTypography variant="button" fontWeight="medium">
+								{members.length}
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								fontWeight="medium"
+								color="secondary"
+							>
+								Participants
+							</SuiTypography>
+						</SuiBox>
+					) : null}
+					{dateTime ? (
+						<SuiBox
+							display="flex"
+							flexDirection="column"
+							lineHeight={0}
+						>
+							<SuiTypography variant="button" fontWeight="medium">
+								{dateTime}
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								fontWeight="medium"
+								color="secondary"
+							>
+								Due date
+							</SuiTypography>
+						</SuiBox>
+					) : null}
+				</SuiBox>
+			</SuiBox>
+		</Card>
+	);
+}
+// Custom styles for ComplexProjectCard
+export function ComplexProjectCard({
+	color,
+	image,
+	title,
+	dateTime,
+	description,
+	members,
+	dropdown,
+}) {
+	return (
+		<Card>
+			<SuiBox p={2}>
+				<SuiBox display="flex" alignItems="center">
+					<SuiBox ml={2} lineHeight={0}>
+						<SuiBox mb={1} lineHeight={0}>
+							<SuiTypography
+								variant="h6"
+								textTransform="capitalize"
+								fontWeight="medium"
+							>
+								{title}
+							</SuiTypography>
+						</SuiBox>
+					</SuiBox>
+					{dropdown && (
+						<SuiTypography
+							color="secondary"
+							onClick={dropdown.action}
+							sx={{
+								ml: "auto",
+								alignSelf: "flex-start",
+								py: 1.25,
+							}}
+						>
+							<Icon
+								fontSize="default"
+								sx={{ cursor: "pointer" }}
+							></Icon>
+						</SuiTypography>
+					)}
+					{dropdown.menu}
+				</SuiBox>
+
+				<SuiBox my={2} lineHeight={1}>
+					<SuiTypography
+						variant="button"
+						fontWeight="regular"
+						color="text"
+					>
+						{description}
+					</SuiTypography>
+				</SuiBox>
+				<Divider />
+				<SuiBox
+					display="flex"
+					justifyContent="space-between"
+					alignItems="center"
+				>
+					{dateTime ? (
+						<SuiBox
+							display="flex"
+							flexDirection="column"
+							lineHeight={0}
+						>
+							<SuiTypography variant="button" fontWeight="medium">
+								{dateTime}
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								fontWeight="medium"
+								color="secondary"
+							>
+								Due date
+							</SuiTypography>
+						</SuiBox>
+					) : null}
+					{dateTime ? (
+						<SuiBox
+							display="flex"
+							flexDirection="column"
+							lineHeight={0}
+						>
+							<SuiTypography variant="button" fontWeight="medium">
+								{dateTime}
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								fontWeight="medium"
+								color="secondary"
+							>
+								Due date
+							</SuiTypography>
+						</SuiBox>
+					) : null}
+				</SuiBox>
+			</SuiBox>
+		</Card>
+	);
+}
 export function AutomotiveDetails() {
 	return (
 		<SuiBox

@@ -12,6 +12,7 @@
     "@material-ui/data-grid": "^4.0.0-alpha.31",
     "@material-ui/icons": "^3.0.2",
     "@material-ui/lab": "^3.0.0-alpha.16",
+    "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.0.6",
     "@popperjs/core": "^2.10.1",
     "animejs": "^2.2.0",
