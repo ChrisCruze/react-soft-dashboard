@@ -9,6 +9,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip"; //required for info card
 import Avatar from "@mui/material/Avatar"; //required for events card
+import Add from "@material-ui/icons/Add";
 
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
@@ -42,6 +43,10 @@ import breakpoints from "./assets/theme/base/breakpoints";
 
 //used for teams card
 import logoSlack from "assets/images/small-logos/logo-slack.svg";
+
+// Soft UI Dashboard PRO React base styles
+import colors from "assets/theme/base/colors";
+import borders from "assets/theme/base/borders";
 
 export const PropsContext = React.createContext({});
 
@@ -1434,7 +1439,6 @@ export function MiniStatisticsCard({
 	icon,
 	direction,
 }) {
-	console.log({ bgColor });
 	return (
 		<Card>
 			<SuiBox bgColor={bgColor} variant="gradient">
@@ -1460,9 +1464,7 @@ export function MiniStatisticsCard({
 									alignItems="center"
 									shadow="md"
 								>
-									<Icon fontSize="small" color="inherit">
-										{icon.component}
-									</Icon>
+									{icon}
 								</SuiBox>
 							</Grid>
 						) : null}
@@ -1509,9 +1511,7 @@ export function MiniStatisticsCard({
 											? icon.color
 											: "white"
 									}
-									color={
-										bgColor === "white" ? "white" : "dark"
-									}
+									// color={bgColor === "white" ? "white" : "dark"}
 									width="3rem"
 									height="3rem"
 									marginLeft="auto"
@@ -1521,9 +1521,7 @@ export function MiniStatisticsCard({
 									alignItems="center"
 									shadow="md"
 								>
-									<Icon fontSize="small" color="inherit">
-										{icon.component}
-									</Icon>
+									{icon}
 								</SuiBox>
 							</Grid>
 						) : null}
@@ -1534,6 +1532,109 @@ export function MiniStatisticsCard({
 	);
 }
 
+MiniStatisticsCard.defaultProps = {
+	bgColor: "white",
+	title: {
+		fontWeight: "medium",
+		text: "",
+	},
+	percentage: {
+		color: "success",
+		text: "",
+	},
+	direction: "right",
+};
+
+export function Stories({ storiesData }) {
+	const { borderWidth } = borders;
+	// const storiesData = [
+	// 	{
+	// 		image: team1,
+	// 		name: "Abbie W",
+	// 		color: "info",
+	// 	},
+	// ];
+
+	const renderStories = storiesData.map(({ image, name, color }) => (
+		<Grid
+			key={name}
+			item
+			xs={4}
+			sm={3}
+			md={2}
+			lg={1}
+			sx={{ flex: "0 0 100%" }}
+		>
+			<SuiBox
+				borderRadius="50%"
+				width="3.625rem"
+				height="3.625rem"
+				display="flex"
+				justifyContent="center"
+				alignItems="center"
+				color="white"
+				mx="auto"
+				border={`${borderWidth[1]} solid ${colors[color].main}`}
+				sx={{ cursor: "pointer" }}
+			>
+				<SuiAvatar src={image} alt={name} />
+			</SuiBox>
+			<SuiBox mt={0.75} textAlign="center" lineHeight={1}>
+				<SuiTypography
+					variant="button"
+					color="text"
+					fontWeight="regular"
+				>
+					{name}
+				</SuiTypography>
+			</SuiBox>
+		</Grid>
+	));
+
+	return (
+		<Card sx={{ overflow: "scroll" }}>
+			<SuiBox width="100%" pt={3} pb={2.5} px={3}>
+				<Grid container justifyContent="space-between" wrap="nowrap">
+					<Grid
+						item
+						xs={4}
+						sm={3}
+						md={2}
+						lg={1}
+						sx={{ flex: "0 0 100%" }}
+					>
+						<SuiBox
+							bgColor="info"
+							borderRadius="50%"
+							width="3.625rem"
+							height="3.625rem"
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							color="white"
+							mx="auto"
+							variant="gradient"
+							sx={{ cursor: "pointer" }}
+						>
+							<Add />
+							{/* <Icon fontSize="small">add</Icon> */}
+						</SuiBox>
+						<SuiBox mt={0.75} textAlign="center" lineHeight={1}>
+							<SuiTypography
+								variant="button"
+								color="text"
+								fontWeight="regular"
+							>
+								Add story
+							</SuiTypography>
+						</SuiBox>
+					</Grid>
+					{renderStories}
+				</Grid>
+			</SuiBox>
+		</Card>
+	);
+}
 function DataTableHeadCell({ width, children, sorted, align, ...rest }) {
 	const { light } = colors;
 	const { size, fontWeightBold } = typography;

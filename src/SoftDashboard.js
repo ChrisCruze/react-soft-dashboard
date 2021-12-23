@@ -9,7 +9,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip"; //required for info card
 import Avatar from "@mui/material/Avatar"; //required for events card
-
+import MenuIcon from "@material-ui/icons/Menu";
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
 import wavesWhite from "assets/images/shapes/waves-white.svg";
@@ -42,6 +42,7 @@ import breakpoints from "./assets/theme/base/breakpoints";
 
 //used for teams card
 import logoSlack from "assets/images/small-logos/logo-slack.svg";
+import team1 from "assets/images/team-1.jpg";
 
 import { PropsContext } from "./SoftElements";
 import {
@@ -55,6 +56,7 @@ import {
 	MiniStatisticsCard,
 	ComplexProjectCard,
 	PlaceholderCard,
+	Stories,
 } from "./SoftElements";
 
 function EventCard({ id, image, title, dateTime, description, action }) {
@@ -154,6 +156,13 @@ const Context = createContext();
 const Dashboard = () => {
 	const { values } = breakpoints;
 	const { size } = typography;
+	const storiesData = [
+		{
+			image: "http://localhost:3000/soft-ui-dashboard-pro-react/static/media/team-1.c821a273.jpg",
+			name: "Abbie W",
+			color: "info",
+		},
+	];
 	return (
 		<Fragment>
 			<DashboardLayout>
@@ -161,6 +170,9 @@ const Dashboard = () => {
 					<SuiBox mb={3}>
 						<AutomotiveDetails />
 					</SuiBox>
+				</SuiBox>
+				<SuiBox my={3}>
+					<Stories storiesData={storiesData} />
 				</SuiBox>
 
 				<SuiBox pt={5} pb={2}>
@@ -201,7 +213,7 @@ const Dashboard = () => {
 										variant: "h5",
 										text: "New project",
 									}}
-									icon={"add"}
+									icon={<MenuIcon />}
 								/>
 							</Grid>
 						</Grid>
@@ -310,7 +322,7 @@ const Dashboard = () => {
 									{/*/>*/}
 								</Grid>
 							</Grid>
-							<Grid container spacing={3}>
+							{/* <Grid container spacing={3}>
 								<Grid item xs={12} sm={5}>
 									<SuiBox mb={3}>
 										<MiniStatisticsCard
@@ -385,7 +397,7 @@ const Dashboard = () => {
 										/>
 									</SuiBox>
 								</Grid>
-							</Grid>
+							</Grid> */}
 						</Grid>
 					</Grid>
 				</SuiBox>
