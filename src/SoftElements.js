@@ -10,6 +10,15 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip"; //required for info card
 import Avatar from "@mui/material/Avatar"; //required for events card
 import Add from "@material-ui/icons/Add";
+import Link from "@mui/material/Link";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Switch from "@mui/material/Switch";
+
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableRow from "@mui/material/TableRow";
+import TableBody from "@mui/material/TableBody";
 
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
@@ -24,6 +33,8 @@ import Typography from "@mui/material/Typography";
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
+import SettingsIcon from "@mui/icons-material/Settings";
+import CloseIcon from "@mui/icons-material/Close";
 // react-table components
 import {
 	useTable,
@@ -34,7 +45,7 @@ import {
 } from "react-table";
 
 //required for profile info card
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -1590,9 +1601,9 @@ export function Stories({ storiesData }) {
 			</SuiBox>
 		</Grid>
 	));
-
+	// sx={{ overflow: "scroll" }}
 	return (
-		<Card sx={{ overflow: "scroll" }}>
+		<Card>
 			<SuiBox width="100%" pt={3} pb={2.5} px={3}>
 				<Grid container justifyContent="space-between" wrap="nowrap">
 					<Grid
@@ -1625,7 +1636,7 @@ export function Stories({ storiesData }) {
 								color="text"
 								fontWeight="regular"
 							>
-								Add story
+								Add Person
 							</SuiTypography>
 						</SuiBox>
 					</Grid>
@@ -1635,6 +1646,358 @@ export function Stories({ storiesData }) {
 		</Card>
 	);
 }
+export function FooterOriginal({ company, links }) {
+	const { href, name } = company;
+	const { size } = typography;
+
+	const renderLinks = () =>
+		links.map((link) => (
+			<SuiBox key={link.name} component="li" px={2} lineHeight={1}>
+				<Link href={link.href} target="_blank">
+					<SuiTypography
+						variant="button"
+						fontWeight="regular"
+						color="text"
+					>
+						{link.name}
+					</SuiTypography>
+				</Link>
+			</SuiBox>
+		));
+
+	return (
+		<SuiBox
+			width="100%"
+			display="flex"
+			flexDirection={{ xs: "column", lg: "row" }}
+			justifyContent="space-between"
+			alignItems="center"
+			px={1.5}
+		>
+			<SuiBox
+				display="flex"
+				justifyContent="center"
+				alignItems="center"
+				flexWrap="wrap"
+				color="text"
+				fontSize={size.sm}
+				px={1.5}
+			>
+				&copy; {new Date().getFullYear()}, made with
+				<SuiBox fontSize={size.md} color="text" mb={-0.5} mx={0.25}>
+					<Icon color="inherit" fontSize="inherit">
+						favorite
+					</Icon>
+				</SuiBox>
+				by
+				<Link href={href} target="_blank">
+					<SuiTypography variant="button" fontWeight="medium">
+						&nbsp;{name}&nbsp;
+					</SuiTypography>
+				</Link>
+				for a better web.
+			</SuiBox>
+			<SuiBox
+				component="ul"
+				sx={({ breakpoints }) => ({
+					display: "flex",
+					flexWrap: "wrap",
+					alignItems: "center",
+					justifyContent: "center",
+					listStyle: "none",
+					mt: 3,
+					mb: 0,
+					p: 0,
+
+					[breakpoints.up("lg")]: {
+						mt: 0,
+					},
+				})}
+			>
+				{renderLinks()}
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+export function Footer({ company, links }) {
+	const { href, name } = company;
+	const { size } = typography;
+
+	const renderLinks = () =>
+		links.map((link) => (
+			<SuiBox key={link.name} component="li" px={2} lineHeight={1}>
+				<Link href={link.href} target="_blank">
+					<SuiTypography
+						variant="button"
+						fontWeight="regular"
+						color="text"
+					>
+						{link.name}
+					</SuiTypography>
+				</Link>
+			</SuiBox>
+		));
+
+	return (
+		<SuiBox
+			width="100%"
+			display="flex"
+			flexDirection={{ xs: "column", lg: "row" }}
+			justifyContent="space-between"
+			alignItems="center"
+			px={1.5}
+		>
+			<SuiBox
+				component="ul"
+				sx={({ breakpoints }) => ({
+					display: "flex",
+					flexWrap: "wrap",
+					alignItems: "center",
+					justifyContent: "center",
+					listStyle: "none",
+					mt: 3,
+					mb: 0,
+					p: 0,
+
+					[breakpoints.up("lg")]: {
+						mt: 0,
+					},
+				})}
+			>
+				{renderLinks()}
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+// Setting default values for the props of Footer
+Footer.defaultProps = {
+	company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+	links: [
+		{ href: "https://www.creative-tim.com/", name: "Creative Tim" },
+		{ href: "https://www.creative-tim.com/presentation", name: "About Us" },
+		{ href: "https://www.creative-tim.com/blog", name: "Blog" },
+		{ href: "https://www.creative-tim.com/license", name: "License" },
+	],
+};
+
+function PagesHeaderCell({ children }) {
+	const { light } = colors;
+	const { size, fontWeightBold } = typography;
+	const { borderWidth } = borders;
+
+	return (
+		<SuiBox
+			component="th"
+			width="100%"
+			textAlign="left"
+			borderBottom={`${borderWidth[1]} solid ${light.main}`}
+			py={1.5}
+			pl={1}
+			pr={3}
+		>
+			<SuiBox
+				width="max-content"
+				textAlign="left"
+				fontSize={size.xxs}
+				fontWeight={fontWeightBold}
+				color="secondary"
+				opacity={0.7}
+				sx={{ textTransform: "uppercase" }}
+			>
+				{children}
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+function PagesBodyCell({ rows, noBorder }) {
+	const { light } = colors;
+	const { borderWidth } = borders;
+
+	const renderRows = rows.map((row) => (
+		<SuiBox
+			key={row}
+			component="td"
+			width="100%"
+			textAlign="left"
+			borderBottom={
+				noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`
+			}
+			p={1}
+		>
+			<SuiTypography
+				display="block"
+				variant="button"
+				fontWeight="medium"
+				color="text"
+				sx={{ width: "max-content" }}
+			>
+				{row}
+			</SuiTypography>
+		</SuiBox>
+	));
+
+	return <TableRow>{renderRows}</TableRow>;
+}
+
+// Setting default values for the props for PagesBodyCell
+PagesBodyCell.defaultProps = {
+	noBorder: false,
+};
+export function SuiTable({ headers, rows, title }) {
+	const PageHeaders = (
+		<Fragment>
+			{headers.map((header, index) => {
+				return <PagesHeaderCell key={index}>{header}</PagesHeaderCell>;
+			})}
+		</Fragment>
+	);
+
+	const PageRows = (
+		<Fragment>
+			{rows.map((row, index) => {
+				return <PagesBodyCell key={index} rows={row} />;
+			})}
+		</Fragment>
+	);
+	return (
+		<Card>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+				pt={2}
+				px={2}
+			>
+				<SuiTypography variant="h6">{title}</SuiTypography>
+				<Tooltip
+					title="Data is based from sessions and is 100% accurate"
+					placement="left"
+				>
+					<SuiButton
+						variant="outlined"
+						color="success"
+						size="small"
+						circular
+						iconOnly
+					>
+						{/* <Icon sx={{ fontWeight: "bold" }}>done</Icon> */}
+					</SuiButton>
+				</Tooltip>
+			</SuiBox>
+			<SuiBox py={1} px={2}>
+				<TableContainer sx={{ boxShadow: "none" }}>
+					<Table>
+						<SuiBox component="thead">
+							<TableRow>{PageHeaders}</TableRow>
+						</SuiBox>
+						<TableBody>{PageRows}</TableBody>
+					</Table>
+				</TableContainer>
+			</SuiBox>
+		</Card>
+	);
+}
+export function Pages() {
+	return (
+		<Card>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+				pt={2}
+				px={2}
+			>
+				<SuiTypography variant="h6">Pages</SuiTypography>
+				<Tooltip
+					title="Data is based from sessions and is 100% accurate"
+					placement="left"
+				>
+					<SuiButton
+						variant="outlined"
+						color="success"
+						size="small"
+						circular
+						iconOnly
+					>
+						<Icon sx={{ fontWeight: "bold" }}>done</Icon>
+					</SuiButton>
+				</Tooltip>
+			</SuiBox>
+			<SuiBox py={1} px={2}>
+				<TableContainer sx={{ boxShadow: "none" }}>
+					<Table>
+						<SuiBox component="thead">
+							<TableRow>
+								<PagesHeaderCell>page</PagesHeaderCell>
+								<PagesHeaderCell>pages view</PagesHeaderCell>
+								<PagesHeaderCell>avg. time</PagesHeaderCell>
+								<PagesHeaderCell>bounce rate</PagesHeaderCell>
+							</TableRow>
+						</SuiBox>
+						<TableBody>
+							<PagesBodyCell
+								rows={["1. /bits", 345, "00:17:07", "40.91%"]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"2. /pages/argon-dashboard",
+									520,
+									"00:23:13",
+									"31.14%",
+								]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"3. /pages/soft-ui-dashboard",
+									122,
+									"00:3:10",
+									"54.10%",
+								]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"4. /bootstrap-themes",
+									"1,900",
+									"00:30:42",
+									"20.93%",
+								]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"5. /react-themes",
+									"1,442",
+									"00:31:50",
+									"34.98%",
+								]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"6. /product/argon-dashboard-angular",
+									"201",
+									"00:12:42",
+									"21.4%",
+								]}
+							/>
+							<PagesBodyCell
+								rows={[
+									"7. /product/material-dashboard-pro",
+									"2,115",
+									"00:50:11",
+									"34.98%",
+								]}
+								noBorder
+							/>
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</SuiBox>
+		</Card>
+	);
+}
+
 function DataTableHeadCell({ width, children, sorted, align, ...rest }) {
 	const { light } = colors;
 	const { size, fontWeightBold } = typography;
@@ -2193,6 +2556,380 @@ const Dashboard = () => {
 		</Fragment>
 	);
 };
+const ConfiguratorRoot = styled(Drawer)(({ theme, ownerState }) => {
+	const { boxShadows, functions, transitions } = theme;
+	const { openConfigurator } = ownerState;
+
+	const configuratorWidth = 360;
+	const { lg } = boxShadows;
+	const { pxToRem } = functions;
+
+	// drawer styles when openConfigurator={true}
+	const drawerOpenStyles = () => ({
+		width: configuratorWidth,
+		left: "initial",
+		right: 0,
+		transition: transitions.create("right", {
+			easing: transitions.easing.sharp,
+			duration: transitions.duration.short,
+		}),
+	});
+
+	// drawer styles when openConfigurator={false}
+	const drawerCloseStyles = () => ({
+		left: "initial",
+		right: pxToRem(-350),
+		transition: transitions.create("all", {
+			easing: transitions.easing.sharp,
+			duration: transitions.duration.short,
+		}),
+	});
+
+	return {
+		"& .MuiDrawer-paper": {
+			height: "100vh",
+			margin: 0,
+			padding: `0 ${pxToRem(10)}`,
+			borderRadius: 0,
+			boxShadow: lg,
+			overflowY: "auto",
+			...(openConfigurator ? drawerOpenStyles() : drawerCloseStyles()),
+		},
+	};
+});
+
+export function Configurator({ controller, setController }) {
+	// const [controller, dispatch] = useSoftUIController();
+	const {
+		openConfigurator,
+		transparentSidenav,
+		miniSidenav,
+		fixedNavbar,
+		sidenavColor,
+	} = controller;
+	const [disabled, setDisabled] = useState(false);
+	const sidenavColors = [
+		"primary",
+		"dark",
+		"info",
+		"success",
+		"warning",
+		"error",
+	];
+
+	// Use the useEffect hook to change the button state for the sidenav type based on window size.
+	useEffect(() => {
+		// A function that sets the disabled state of the buttons for the sidenav type.
+		function handleDisabled() {
+			return window.innerWidth > 1200
+				? setDisabled(false)
+				: setDisabled(true);
+		}
+
+		// The event listener that's calling the handleDisabled function when resizing the window.
+		window.addEventListener("resize", handleDisabled);
+
+		// Call the handleDisabled function to set the state with the initial value.
+		handleDisabled();
+
+		// Remove event listener on cleanup
+		return () => window.removeEventListener("resize", handleDisabled);
+	}, []);
+
+	const handleCloseConfigurator = () =>
+		setController({ ...controller, openConfigurator: false }); //setOpenConfigurator(dispatch, false);
+	const handleTransparentSidenav = () =>
+		setController({ ...controller, transparentSidenav: false }); //setTransparentSidenav(dispatch, true);
+	const handleWhiteSidenav = () =>
+		setController({ ...controller, transparentSidenav: false }); //setTransparentSidenav(dispatch, false);
+	const handleMiniSidenav = () =>
+		setController({ ...controller, transparentSidenav: false }); //setMiniSidenav(dispatch, !miniSidenav);
+	const handleFixedNavbar = () =>
+		setController({ ...controller, transparentSidenav: false }); //setFixedNavbar(dispatch, !fixedNavbar);
+
+	// sidenav type buttons styles
+	const sidenavTypeButtonsStyles = ({
+		functions: { pxToRem },
+		boxShadows: { buttonBoxShadow },
+	}) => ({
+		height: pxToRem(42),
+		boxShadow: buttonBoxShadow.main,
+
+		"&:hover, &:focus": {
+			opacity: 1,
+		},
+	});
+
+	return (
+		<ConfiguratorRoot variant="permanent" ownerState={{ openConfigurator }}>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="baseline"
+				pt={3}
+				pb={0.8}
+				px={3}
+			>
+				<SuiBox>
+					<SuiTypography variant="h5">
+						Soft UI Configurator
+					</SuiTypography>
+					<SuiTypography variant="body2" color="text">
+						See our dashboard options.
+					</SuiTypography>
+				</SuiBox>
+
+				<CloseIcon
+					sx={({
+						typography: { size, fontWeightBold },
+						palette: { dark },
+					}) => ({
+						fontSize: `${size.md} !important`,
+						fontWeight: `${fontWeightBold} !important`,
+						stroke: dark.main,
+						strokeWidth: "2px",
+						cursor: "pointer",
+						mt: 2,
+					})}
+					onClick={handleCloseConfigurator}
+				>
+					close
+				</CloseIcon>
+			</SuiBox>
+
+			<Divider />
+
+			{/* <SuiBox pt={1.25} pb={3} px={3}>
+				<SuiBox>
+					<SuiTypography variant="h6">Sidenav Colors</SuiTypography>
+
+					<SuiBox mb={0.5}>
+						{sidenavColors.map((color) => (
+							<IconButton
+								key={color}
+								sx={({
+									borders: { borderWidth },
+									palette: { white, dark },
+									transitions,
+								}) => ({
+									width: "24px",
+									height: "24px",
+									padding: 0,
+									border: `${borderWidth[1]} solid ${white.main}`,
+									borderColor:
+										sidenavColor === color && dark.main,
+									transition: transitions.create(
+										"border-color",
+										{
+											easing: transitions.easing.sharp,
+											duration:
+												transitions.duration.shorter,
+										}
+									),
+									backgroundImage: ({
+										functions: { linearGradient },
+										palette: { gradients },
+									}) =>
+										linearGradient(
+											gradients[color].main,
+											gradients[color].state
+										),
+
+									"&:not(:last-child)": {
+										mr: 1,
+									},
+
+									"&:hover, &:focus, &:active": {
+										borderColor: dark.main,
+									},
+								})}
+								onClick={() => setSidenavColor(dispatch, color)}
+							/>
+						))}
+					</SuiBox>
+				</SuiBox>
+
+				<SuiBox mt={3} lineHeight={1}>
+					<SuiTypography variant="h6">Sidenav Type</SuiTypography>
+					<SuiTypography
+						variant="button"
+						color="text"
+						fontWeight="regular"
+					>
+						Choose between 2 different sidenav types.
+					</SuiTypography>
+
+					<SuiBox
+						sx={{
+							display: "flex",
+							mt: 2,
+						}}
+					>
+						<SuiButton
+							color="info"
+							variant={
+								transparentSidenav ? "gradient" : "outlined"
+							}
+							onClick={handleTransparentSidenav}
+							disabled={disabled}
+							fullWidth
+							sx={{
+								mr: 1,
+								...sidenavTypeButtonsStyles,
+							}}
+						>
+							Transparent
+						</SuiButton>
+						<SuiButton
+							color="info"
+							variant={
+								transparentSidenav ? "outlined" : "gradient"
+							}
+							onClick={handleWhiteSidenav}
+							disabled={disabled}
+							fullWidth
+							sx={sidenavTypeButtonsStyles}
+						>
+							White
+						</SuiButton>
+					</SuiBox>
+				</SuiBox>
+				<SuiBox mt={3} mb={2} lineHeight={1}>
+					<SuiTypography variant="h6">Navbar Fixed</SuiTypography>
+
+					<Switch
+						checked={fixedNavbar}
+						onChange={handleFixedNavbar}
+					/>
+				</SuiBox>
+
+				<Divider />
+
+				<SuiBox mt={2} mb={3} lineHeight={1}>
+					<SuiTypography variant="h6">Sidenav Mini</SuiTypography>
+
+					<Switch
+						checked={miniSidenav}
+						onChange={handleMiniSidenav}
+					/>
+				</SuiBox>
+
+				<Divider />
+
+				<SuiBox mt={3} mb={2}>
+					<SuiBox mb={2}>
+						<SuiButton
+							component={Link}
+							href="https://www.creative-tim.com/product/soft-ui-dashboard-pro-react"
+							target="_blank"
+							rel="noreferrer"
+							color="info"
+							variant="gradient"
+							fullWidth
+						>
+							buy now
+						</SuiButton>
+					</SuiBox>
+					<SuiBox mb={2}>
+						<SuiButton
+							component={Link}
+							href="https://www.creative-tim.com/product/soft-ui-dashboard-react"
+							target="_blank"
+							rel="noreferrer"
+							color="dark"
+							variant="gradient"
+							fullWidth
+						>
+							free download
+						</SuiButton>
+					</SuiBox>
+					<SuiButton
+						component={Link}
+						href="https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/"
+						target="_blank"
+						rel="noreferrer"
+						color="dark"
+						variant="outlined"
+						fullWidth
+					>
+						view documentation
+					</SuiButton>
+				</SuiBox>
+				<SuiBox display="flex" justifyContent="center">
+					<GitHubButton
+						href="https://github.com/creativetimofficial/ct-soft-ui-dashboard-pro-react"
+						data-icon="octicon-star"
+						data-size="large"
+						data-show-count="true"
+						aria-label="Star creativetimofficial/ct-soft-ui-dashboard-pro-react on GitHub"
+					>
+						Star
+					</GitHubButton>
+				</SuiBox>
+				<SuiBox mt={3} textAlign="center">
+					<SuiBox mb={0.5}>
+						<SuiTypography variant="h6">
+							Thank you for sharing!
+						</SuiTypography>
+					</SuiBox>
+
+					<SuiBox display="flex" justifyContent="center">
+						<SuiBox mr={1.5}>
+							<SuiButton
+								component={Link}
+								href="//twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20PRO%20React%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23react%20%mui&url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard-pro-react"
+								target="_blank"
+								rel="noreferrer"
+								color="dark"
+							>
+								<TwitterIcon />
+								&nbsp; Tweet
+							</SuiButton>
+						</SuiBox>
+						<SuiButton
+							component={Link}
+							href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/soft-ui-dashboard-pro-react"
+							target="_blank"
+							rel="noreferrer"
+							color="dark"
+						>
+							<FacebookIcon />
+							&nbsp; Share
+						</SuiButton>
+					</SuiBox>
+				</SuiBox>
+			</SuiBox> */}
+		</ConfiguratorRoot>
+	);
+}
+
+export const ConfigurationButton = ({ handleConfiguratorOpen }) => {
+	const configsButton = (
+		<SuiBox
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			width="3.5rem"
+			height="3.5rem"
+			bgColor="white"
+			shadow="sm"
+			borderRadius="50%"
+			position="fixed"
+			right="2rem"
+			bottom="2rem"
+			zIndex={99}
+			color="dark"
+			sx={{ cursor: "pointer" }}
+			onClick={handleConfiguratorOpen}
+		>
+			<SettingsIcon />
+			{/* <Icon fontSize="default" color="inherit">
+				settings
+			</Icon> */}
+		</SuiBox>
+	);
+	return <Fragment>{configsButton}</Fragment>;
+};
 
 export const Sandbox = () => {
 	const controller = {
@@ -2205,7 +2942,6 @@ export const Sandbox = () => {
 		direction: "ltr",
 		layout: "dashboard",
 	};
-	console.log({ theme });
 	return (
 		<Fragment>
 			<ThemeProvider theme={theme}>

@@ -57,6 +57,9 @@ import {
 	ComplexProjectCard,
 	PlaceholderCard,
 	Stories,
+	Footer,
+	ConfigurationButton,
+	Configurator,
 } from "./SoftElements";
 
 function EventCard({ id, image, title, dateTime, description, action }) {
@@ -401,13 +404,14 @@ const Dashboard = () => {
 						</Grid>
 					</Grid>
 				</SuiBox>
+				<Footer />
 			</DashboardLayout>
 		</Fragment>
 	);
 };
 
 export const Sandbox = () => {
-	const controller = {
+	const controllerBase = {
 		miniSidenav: false,
 		transparentSidenav: true,
 		sidenavColor: "info",
@@ -416,6 +420,11 @@ export const Sandbox = () => {
 		openConfigurator: false,
 		direction: "ltr",
 		layout: "dashboard",
+	};
+	const [controller, setController] = useState(controllerBase);
+	const handleConfiguratorOpen = (e) => {
+		e.preventDefault();
+		setController({ ...controller, openConfigurator: true });
 	};
 	return (
 		<Fragment>
@@ -426,6 +435,13 @@ export const Sandbox = () => {
 						controller,
 					}}
 				>
+					<Configurator
+						controller={controller}
+						setController={setController}
+					/>
+					<ConfigurationButton
+						handleConfiguratorOpen={handleConfiguratorOpen}
+					/>
 					<Dashboard />
 				</PropsContext.Provider>
 			</ThemeProvider>
