@@ -14,15 +14,30 @@ import Link from "@mui/material/Link";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Switch from "@mui/material/Switch";
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import InputBase from "@mui/material/InputBase";
+import Select from "react-select";
+
+import CardContent from "@mui/material/CardContent";
 
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
 
+import Collapse from "@mui/material/Collapse";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import List from "@mui/material/List";
+
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
 import wavesWhite from "assets/images/shapes/waves-white.svg";
+//import backgroundImage from "assets/images/curved-images/white-curved.jpeg";
+import backgroundImage from "assets/images/mercedes-eqc.png";
 
 //Suibox
 import Box from "@mui/material/Box";
@@ -46,6 +61,8 @@ import {
 
 //required for profile info card
 // import { Link } from "react-router-dom";
+// import { Route, Redirect, useLocation } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -58,9 +75,1303 @@ import logoSlack from "assets/images/small-logos/logo-slack.svg";
 // Soft UI Dashboard PRO React base styles
 import colors from "assets/theme/base/colors";
 import borders from "assets/theme/base/borders";
+import boxShadows from "assets/theme/base/boxShadows";
+
+// Soft UI Dashboard PRO React helper functions
+import pxToRem from "assets/theme/functions/pxToRem";
+import boxShadow from "assets/theme/functions/boxShadow";
+
+// @emotion/react components
+import { keyframes } from "@emotion/react";
+
+import curved9 from "assets/images/curved-images/curved9.jpg";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
+// react-quill components
+import ReactQuill from "react-quill";
+
+// react-quill styles
+import "react-quill/dist/quill.snow.css";
 
 export const PropsContext = React.createContext({});
+function SpaceShip({ color, size }) {
+	return (
+		<svg
+			width={size}
+			height={size}
+			viewBox="0 0 42 42"
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlnsXlink="http://www.w3.org/1999/xlink"
+		>
+			<title>spaceship</title>
+			<g
+				id="Basic-Elements"
+				stroke="none"
+				strokeWidth="1"
+				fill="none"
+				fillRule="evenodd"
+			>
+				<g
+					id="Rounded-Icons"
+					transform="translate(-1720.000000, -592.000000)"
+					fill={colors[color] ? colors[color].main : colors.dark.main}
+					fillRule="nonzero"
+				>
+					<g
+						id="Icons-with-opacity"
+						transform="translate(1716.000000, 291.000000)"
+					>
+						<g
+							id="spaceship"
+							transform="translate(4.000000, 301.000000)"
+						>
+							<path d="M39.3,0.706666667 C38.9660984,0.370464027 38.5048767,0.192278529 38.0316667,0.216666667 C14.6516667,1.43666667 6.015,22.2633333 5.93166667,22.4733333 C5.68236407,23.0926189 5.82664679,23.8009159 6.29833333,24.2733333 L15.7266667,33.7016667 C16.2013871,34.1756798 16.9140329,34.3188658 17.535,34.065 C17.7433333,33.98 38.4583333,25.2466667 39.7816667,1.97666667 C39.8087196,1.50414529 39.6335979,1.04240574 39.3,0.706666667 Z M25.69,19.0233333 C24.7367525,19.9768687 23.3029475,20.2622391 22.0572426,19.7463614 C20.8115377,19.2304837 19.9992882,18.0149658 19.9992882,16.6666667 C19.9992882,15.3183676 20.8115377,14.1028496 22.0572426,13.5869719 C23.3029475,13.0710943 24.7367525,13.3564646 25.69,14.31 C26.9912731,15.6116662 26.9912731,17.7216672 25.69,19.0233333 L25.69,19.0233333 Z" />
+							<path
+								d="M1.855,31.4066667 C3.05106558,30.2024182 4.79973884,29.7296005 6.43969145,30.1670277 C8.07964407,30.6044549 9.36054508,31.8853559 9.7979723,33.5253085 C10.2353995,35.1652612 9.76258177,36.9139344 8.55833333,38.11 C6.70666667,39.9616667 0,40 0,40 C0,40 0,33.2566667 1.855,31.4066667 Z"
+								id="Path"
+							/>
+							<path
+								d="M17.2616667,3.90166667 C12.4943643,3.07192755 7.62174065,4.61673894 4.20333333,8.04166667 C3.31200265,8.94126033 2.53706177,9.94913142 1.89666667,11.0416667 C1.5109569,11.6966059 1.61721591,12.5295394 2.155,13.0666667 L5.47,16.3833333 C8.55036617,11.4946947 12.5559074,7.25476565 17.2616667,3.90166667 L17.2616667,3.90166667 Z"
+								id="color-2"
+								opacity="0.598539807"
+							/>
+							<path
+								d="M36.0983333,22.7383333 C36.9280725,27.5056357 35.3832611,32.3782594 31.9583333,35.7966667 C31.0587397,36.6879974 30.0508686,37.4629382 28.9583333,38.1033333 C28.3033941,38.4890431 27.4704606,38.3827841 26.9333333,37.845 L23.6166667,34.53 C28.5053053,31.4496338 32.7452344,27.4440926 36.0983333,22.7383333 L36.0983333,22.7383333 Z"
+								id="color-3"
+								opacity="0.598539807"
+							/>
+						</g>
+					</g>
+				</g>
+			</g>
+		</svg>
+	);
+}
 
+// Setting default values for the props of SpaceShip
+SpaceShip.defaultProps = {
+	color: "dark",
+	size: "16px",
+};
+
+function CustomerSupport({ color, size }) {
+	return (
+		<svg
+			width={size}
+			height={size}
+			viewBox="0 0 42 42"
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlnsXlink="http://www.w3.org/1999/xlink"
+		>
+			<title>customer-support</title>
+			<g
+				id="Basic-Elements"
+				stroke="none"
+				strokeWidth="1"
+				fill="none"
+				fillRule="evenodd"
+			>
+				<g
+					id="Rounded-Icons"
+					transform="translate(-1717.000000, -291.000000)"
+					fill={colors[color] ? colors[color].main : colors.dark.main}
+					fillRule="nonzero"
+				>
+					<g
+						id="Icons-with-opacity"
+						transform="translate(1716.000000, 291.000000)"
+					>
+						<g
+							id="customer-support"
+							transform="translate(1.000000, 0.000000)"
+						>
+							<path
+								className="color-background"
+								d="M45,0 L26,0 C25.447,0 25,0.447 25,1 L25,20 C25,20.379 25.214,20.725 25.553,20.895 C25.694,20.965 25.848,21 26,21 C26.212,21 26.424,20.933 26.6,20.8 L34.333,15 L45,15 C45.553,15 46,14.553 46,14 L46,1 C46,0.447 45.553,0 45,0 Z"
+								id="Path"
+								opacity="0.59858631"
+							/>
+							<path
+								d="M22.883,32.86 C20.761,32.012 17.324,31 13,31 C8.676,31 5.239,32.012 3.116,32.86 C1.224,33.619 0,35.438 0,37.494 L0,41 C0,41.553 0.447,42 1,42 L25,42 C25.553,42 26,41.553 26,41 L26,37.494 C26,35.438 24.776,33.619 22.883,32.86 Z"
+								id="Path"
+							/>
+							<path
+								d="M13,28 C17.432,28 21,22.529 21,18 C21,13.589 17.411,10 13,10 C8.589,10 5,13.589 5,18 C5,22.529 8.568,28 13,28 Z"
+								id="Path"
+							/>
+						</g>
+					</g>
+				</g>
+			</g>
+		</svg>
+	);
+}
+
+// Setting default values for the props of CustomerSupport
+CustomerSupport.defaultProps = {
+	color: "dark",
+	size: "16px",
+};
+
+function CreditCard({ color, size }) {
+	return (
+		<svg
+			width={size}
+			height={size}
+			viewBox="0 0 42 42"
+			version="1.1"
+			xmlns="http://www.w3.org/2000/svg"
+			xmlnsXlink="http://www.w3.org/1999/xlink"
+		>
+			<title>credit-card</title>
+			<g
+				id="Basic-Elements"
+				stroke="none"
+				strokeWidth="1"
+				fill="none"
+				fillRule="evenodd"
+			>
+				<g
+					id="Rounded-Icons"
+					transform="translate(-2169.000000, -745.000000)"
+					fill={colors[color] ? colors[color].main : colors.dark.main}
+					fillRule="nonzero"
+				>
+					<g
+						id="Icons-with-opacity"
+						transform="translate(1716.000000, 291.000000)"
+					>
+						<g
+							id="credit-card"
+							transform="translate(453.000000, 454.000000)"
+						>
+							<path
+								d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z"
+								id="Path"
+								opacity="0.593633743"
+							/>
+							<path d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z" />
+						</g>
+					</g>
+				</g>
+			</g>
+		</svg>
+	);
+}
+
+// Setting default values for the props of CreditCard
+CreditCard.defaultProps = {
+	color: "dark",
+	size: "16px",
+};
+
+export const routes = [
+	{ type: "divider", key: "divider-1" },
+	{ type: "title", title: "Docs", key: "title-docs" },
+	{
+		type: "collapse",
+		name: "Basic",
+		key: "basic",
+		icon: <SpaceShip size="12px" />,
+		collapse: [
+			{
+				name: "Getting Started",
+				key: "getting-started",
+				collapse: [
+					{
+						name: "Overview",
+						key: "overview",
+						href: "https://www.creative-tim.com/learning-lab/react/overview/soft-ui-dashboard/",
+					},
+					{
+						name: "License",
+						key: "license",
+						href: "https://www.creative-tim.com/learning-lab/react/license/soft-ui-dashboard/",
+					},
+					{
+						name: "Quick Start",
+						key: "quick-start",
+						href: "https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/",
+					},
+					{
+						name: "Build Tools",
+						key: "build-tools",
+						href: "https://www.creative-tim.com/learning-lab/react/build-tools/soft-ui-dashboard/",
+					},
+				],
+			},
+			{
+				name: "Foundation",
+				key: "foundation",
+				collapse: [
+					{
+						name: "Colors",
+						key: "colors",
+						href: "https://www.creative-tim.com/learning-lab/react/colors/soft-ui-dashboard/",
+					},
+					{
+						name: "Grid",
+						key: "grid",
+						href: "https://www.creative-tim.com/learning-lab/react/grid/soft-ui-dashboard/",
+					},
+					{
+						name: "Typography",
+						key: "base-typography",
+						href: "https://www.creative-tim.com/learning-lab/react/base-typography/soft-ui-dashboard/",
+					},
+					{
+						name: "Borders",
+						key: "borders",
+						href: "https://www.creative-tim.com/learning-lab/react/borders/soft-ui-dashboard/",
+					},
+					{
+						name: "Box Shadows",
+						key: "box-shadows",
+						href: "https://www.creative-tim.com/learning-lab/react/box-shadows/soft-ui-dashboard/",
+					},
+					{
+						name: "Functions",
+						key: "functions",
+						href: "https://www.creative-tim.com/learning-lab/react/functions/soft-ui-dashboard/",
+					},
+					{
+						name: "Routing System",
+						key: "routing-system",
+						href: "https://www.creative-tim.com/learning-lab/react/routing-system/soft-ui-dashboard/",
+					},
+				],
+			},
+		],
+	},
+	{
+		type: "collapse",
+		name: "Components",
+		key: "components",
+		icon: <CustomerSupport size="12px" />,
+		collapse: [
+			{
+				name: "Alerts",
+				key: "alerts",
+				href: "https://www.creative-tim.com/learning-lab/react/alerts/soft-ui-dashboard/",
+			},
+			{
+				name: "Avatar",
+				key: "avatar",
+				href: "https://www.creative-tim.com/learning-lab/react/avatar/soft-ui-dashboard/",
+			},
+			{
+				name: "Badge",
+				key: "badge",
+				href: "https://www.creative-tim.com/learning-lab/react/badge/soft-ui-dashboard/",
+			},
+			{
+				name: "Badge Dot",
+				key: "badge-dot",
+				href: "https://www.creative-tim.com/learning-lab/react/badge-dot/soft-ui-dashboard/",
+			},
+			{
+				name: "Box",
+				key: "box",
+				href: "https://www.creative-tim.com/learning-lab/react/box/soft-ui-dashboard/",
+			},
+			{
+				name: "Buttons",
+				key: "buttons",
+				href: "https://www.creative-tim.com/learning-lab/react/buttons/soft-ui-dashboard/",
+			},
+			{
+				name: "Date Picker",
+				key: "date-picker",
+				href: "https://www.creative-tim.com/learning-lab/react/datepicker/soft-ui-dashboard/",
+			},
+			{
+				name: "Dropzone",
+				key: "dropzone",
+				href: "https://www.creative-tim.com/learning-lab/react/dropzone/soft-ui-dashboard/",
+			},
+			{
+				name: "Editor",
+				key: "editor",
+				href: "https://www.creative-tim.com/learning-lab/react/quill/soft-ui-dashboard/",
+			},
+			{
+				name: "Input",
+				key: "input",
+				href: "https://www.creative-tim.com/learning-lab/react/input/soft-ui-dashboard/",
+			},
+			{
+				name: "Pagination",
+				key: "pagination",
+				href: "https://www.creative-tim.com/learning-lab/react/pagination/soft-ui-dashboard/",
+			},
+			{
+				name: "Progress",
+				key: "progress",
+				href: "https://www.creative-tim.com/learning-lab/react/progress/soft-ui-dashboard/",
+			},
+			{
+				name: "Select",
+				key: "select",
+				href: "https://www.creative-tim.com/learning-lab/react/select/soft-ui-dashboard/",
+			},
+			{
+				name: "Snackbar",
+				key: "snackbar",
+				href: "https://www.creative-tim.com/learning-lab/react/snackbar/soft-ui-dashboard/",
+			},
+			{
+				name: "Social Button",
+				key: "social-button",
+				href: "https://www.creative-tim.com/learning-lab/react/social-buttons/soft-ui-dashboard/",
+			},
+			{
+				name: "Tag Input",
+				key: "tag-input",
+				href: "https://www.creative-tim.com/learning-lab/react/tag-input/soft-ui-dashboard/",
+			},
+			{
+				name: "Typography",
+				key: "typography",
+				href: "https://www.creative-tim.com/learning-lab/react/typography/soft-ui-dashboard/",
+			},
+		],
+	},
+	{
+		type: "collapse",
+		name: "Change Log",
+		key: "changelog",
+		href: "https://github.com/creativetimofficial/ct-soft-ui-dashboard-pro-material-ui/blob/main/CHANGELOG.md",
+		icon: <CreditCard size="12px" />,
+		noCollapse: true,
+	},
+];
+
+const item = {
+	width: "100%",
+	padding: 0,
+	cursor: "pointer",
+};
+
+function itemContent(theme, ownerState) {
+	const { palette, typography, transitions, functions } = theme;
+	const { active, miniSidenav, name, nested } = ownerState;
+
+	const { dark, gradients } = palette;
+	const { size, fontWeightMedium, fontWeightRegular } = typography;
+	const { pxToRem, rgba } = functions;
+
+	return {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between",
+		width: "100%",
+		padding: `${pxToRem(7.2)} ${pxToRem(16)}`,
+		margin: `0 ${pxToRem(16)} 0 ${pxToRem(21.6)}`,
+		userSelect: "none",
+		position: "relative",
+
+		"& span": {
+			color: active ? dark.main : rgba(gradients.dark.state, 0.7),
+			fontWeight: active ? fontWeightMedium : fontWeightRegular,
+			fontSize: size.sm,
+			opacity: miniSidenav ? 0 : 1,
+			transition: transitions.create(["opacity", "color"], {
+				easing: transitions.easing.easeInOut,
+				duration: transitions.duration.standard,
+			}),
+		},
+
+		"&::before": {
+			content: () => {
+				if (nested) {
+					return nested && miniSidenav && `"${name[0]}"`;
+				}
+
+				return miniSidenav ? `"${name[0]}"` : '""';
+			},
+			width: () => {
+				if (!miniSidenav) {
+					return active ? pxToRem(8) : pxToRem(5);
+				}
+
+				return 0;
+			},
+			height: () => {
+				if (!miniSidenav) {
+					return active ? pxToRem(8) : pxToRem(5);
+				}
+
+				return 0;
+			},
+			backgroundColor: active
+				? dark.main
+				: rgba(gradients.dark.state, 0.5),
+			color: active ? dark.main : rgba(gradients.dark.state, 0.5),
+			fontWeight: active ? fontWeightMedium : fontWeightRegular,
+			display: "flex",
+			alignItems: "center",
+			position: "absolute",
+			top: "50%",
+			transform: "translateY(-50%)",
+			left: pxToRem(-18),
+			opacity: 1,
+			borderRadius: "50%",
+			fontSize: size.sm,
+		},
+	};
+}
+
+function itemArrow(theme, ownerState) {
+	const { typography, transitions, functions, palette } = theme;
+	const { open, miniSidenav } = ownerState;
+
+	const { dark, gradients } = palette;
+	const { size } = typography;
+	const { pxToRem, rgba } = functions;
+
+	return {
+		fontSize: `${size.md} !important`,
+		fontWeight: 700,
+		marginRight: pxToRem(-2.5),
+		transform: () => {
+			if (open) {
+				return miniSidenav
+					? `translateX(${pxToRem(-24)}) rotate(0)`
+					: "rotate(0)";
+			}
+
+			return miniSidenav
+				? `translateX(${pxToRem(-24)}) rotate(-180deg)`
+				: "rotate(-180deg)";
+		},
+		color: open ? dark.main : rgba(gradients.dark.state, 0.4),
+		transition: transitions.create(["color", "transform"], {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.shorter,
+		}),
+	};
+}
+
+function sidenavLogoLabel(theme, ownerState) {
+	const { functions, transitions, typography, breakpoints } = theme;
+	const { miniSidenav } = ownerState;
+
+	const { pxToRem } = functions;
+	const { fontWeightMedium } = typography;
+
+	return {
+		ml: 0.5,
+		fontWeight: fontWeightMedium,
+		wordSpacing: pxToRem(-1),
+		transition: transitions.create("opacity", {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.standard,
+		}),
+
+		[breakpoints.up("xl")]: {
+			opacity: miniSidenav ? 0 : 1,
+		},
+	};
+}
+function collapseItem(theme, ownerState) {
+	const {
+		palette,
+		transitions,
+		breakpoints,
+		boxShadows,
+		borders,
+		functions,
+	} = theme;
+	const { active, transparentSidenav } = ownerState;
+
+	const { dark, white, text, transparent } = palette;
+	const { xxl } = boxShadows;
+	const { borderRadius } = borders;
+	const { pxToRem } = functions;
+
+	return {
+		background:
+			active && transparentSidenav ? white.main : transparent.main,
+		color: active ? dark.main : text.main,
+		display: "flex",
+		alignItems: "center",
+		width: "100%",
+		padding: `${pxToRem(10.8)} ${pxToRem(12.8)} ${pxToRem(10.8)} ${pxToRem(
+			16
+		)}`,
+		margin: `0 ${pxToRem(16)}`,
+		borderRadius: borderRadius.md,
+		cursor: "pointer",
+		userSelect: "none",
+		whiteSpace: "nowrap",
+		boxShadow: active && transparentSidenav ? xxl : "none",
+		[breakpoints.up("xl")]: {
+			boxShadow: () => {
+				if (active) {
+					return transparentSidenav ? xxl : "none";
+				}
+
+				return "none";
+			},
+			transition: transitions.create("box-shadow", {
+				easing: transitions.easing.easeInOut,
+				duration: transitions.duration.shorter,
+			}),
+		},
+	};
+}
+
+function collapseIconBox(theme, ownerState) {
+	const {
+		palette,
+		transitions,
+		breakpoints,
+		boxShadows,
+		borders,
+		functions,
+	} = theme;
+	const { active, transparentSidenav, color } = ownerState;
+
+	const { white, info, light, gradients } = palette;
+	const { md } = boxShadows;
+	const { borderRadius } = borders;
+	const { pxToRem } = functions;
+
+	return {
+		background: () => {
+			if (active) {
+				return color === "default" ? info.main : palette[color].main;
+			}
+
+			return light.main;
+		},
+		minWidth: pxToRem(32),
+		minHeight: pxToRem(32),
+		borderRadius: borderRadius.md,
+		display: "grid",
+		placeItems: "center",
+		boxShadow: md,
+		transition: transitions.create("margin", {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.standard,
+		}),
+
+		[breakpoints.up("xl")]: {
+			background: () => {
+				let background;
+
+				if (!active) {
+					background = transparentSidenav ? white.main : light.main;
+				} else if (color === "default") {
+					background = info.main;
+				} else if (color === "warning") {
+					background = gradients.warning.main;
+				} else {
+					background = palette[color].main;
+				}
+
+				return background;
+			},
+		},
+
+		"& svg, svg g": {
+			fill: active ? white.main : gradients.dark.state,
+		},
+	};
+}
+
+const collapseIcon = ({ palette: { white, gradients } }, { active }) => ({
+	color: active ? white.main : gradients.dark.state,
+});
+
+function collapseText(theme, ownerState) {
+	const { typography, transitions, breakpoints, functions } = theme;
+	const { miniSidenav, transparentSidenav, active } = ownerState;
+
+	const { size, fontWeightMedium, fontWeightRegular } = typography;
+	const { pxToRem } = functions;
+
+	return {
+		marginLeft: pxToRem(12.8),
+
+		[breakpoints.up("xl")]: {
+			opacity: miniSidenav || (miniSidenav && transparentSidenav) ? 0 : 1,
+			maxWidth:
+				miniSidenav || (miniSidenav && transparentSidenav) ? 0 : "100%",
+			marginLeft:
+				miniSidenav || (miniSidenav && transparentSidenav)
+					? 0
+					: pxToRem(12.8),
+			transition: transitions.create(["opacity", "margin"], {
+				easing: transitions.easing.easeInOut,
+				duration: transitions.duration.standard,
+			}),
+		},
+
+		"& span": {
+			fontWeight: active ? fontWeightMedium : fontWeightRegular,
+			fontSize: size.sm,
+			lineHeight: 0,
+		},
+	};
+}
+
+function collapseArrow(theme, ownerState) {
+	const { palette, typography, transitions, breakpoints, functions } = theme;
+	const { noCollapse, transparentSidenav, miniSidenav, open } = ownerState;
+
+	const { dark, gradients } = palette;
+	const { size } = typography;
+	const { pxToRem, rgba } = functions;
+
+	return {
+		fontSize: `${size.md} !important`,
+		fontWeight: 700,
+		marginBottom: pxToRem(-1),
+		transform: open ? "rotate(0)" : "rotate(-180deg)",
+		color: open ? dark.main : rgba(gradients.dark.state, 0.4),
+		transition: transitions.create(["color", "transform", "opacity"], {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.shorter,
+		}),
+
+		[breakpoints.up("xl")]: {
+			display:
+				noCollapse || (transparentSidenav && miniSidenav) || miniSidenav
+					? "none !important"
+					: "block !important",
+		},
+	};
+}
+
+function card(theme, ownerState) {
+	const { borders, functions, transitions, breakpoints } = theme;
+	const { miniSidenav } = ownerState;
+
+	const { borderRadius } = borders;
+	const { pxToRem } = functions;
+
+	return {
+		minWidth: "auto",
+		backgroundImage: `url(${backgroundImage})`,
+		backgroundPosition: "50%",
+		backgroundSize: "cover",
+		borderRadius: borderRadius.xl,
+		boxShadow: "none",
+
+		[breakpoints.up("xl")]: {
+			maxHeight: miniSidenav ? pxToRem(64) : pxToRem(192),
+			transition: transitions.create("max-height", {
+				easing: transitions.easing.easeInOut,
+				duration: transitions.duration.standard,
+			}),
+		},
+	};
+}
+
+function cardContent(theme, ownerState) {
+	const { palette, functions, borders } = theme;
+	const { sidenavColor } = ownerState;
+
+	const { white, dark, gradients } = palette;
+	const { linearGradient } = functions;
+	const { borderRadius } = borders;
+
+	return {
+		color: white.main,
+		position: "relative",
+		zIndex: 2,
+		width: "100%",
+		height: "100%",
+		p: 2,
+
+		"&::after": {
+			content: '""',
+			backgroundImage:
+				sidenavColor === "default"
+					? linearGradient(
+							gradients.secondary.main,
+							gradients.secondary.state
+					  )
+					: linearGradient(
+							gradients[sidenavColor].main,
+							gradients[sidenavColor].state
+					  ),
+			display: "block",
+			height: "100%",
+			width: "100%",
+			borderRadius: borderRadius.xl,
+			position: "absolute",
+			top: 0,
+			left: 0,
+			opacity: 0.65,
+			zIndex: -1,
+		},
+
+		"& .MuiButton-root": {
+			color: dark.main,
+		},
+
+		"&:last-child": {
+			pb: 2,
+		},
+	};
+}
+
+const cardIconBox = {
+	display: "grid",
+	placeItems: "center",
+	transition: ({ transitions }) =>
+		transitions.create("margin", {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.standard,
+		}),
+};
+
+function cardIcon(theme, ownerState) {
+	const { functions, palette } = theme;
+	const { sidenavColor } = ownerState;
+
+	const { linearGradient } = functions;
+	const { gradients, transparent } = palette;
+
+	return {
+		backgroundImage:
+			sidenavColor === "default"
+				? linearGradient(gradients.dark, gradients.dark.state)
+				: linearGradient(
+						gradients[sidenavColor].main,
+						gradients[sidenavColor].state
+				  ),
+		WebkitBackgroundClip: "text",
+		WebkitTextFillColor: transparent.main,
+	};
+}
+
+function SidenavCard({ controller }) {
+	// const [controller] = useSoftUIController();
+	const { miniSidenav, sidenavColor } = controller;
+
+	return (
+		<Card sx={(theme) => card(theme, { miniSidenav })}>
+			<CardContent sx={(theme) => cardContent(theme, { sidenavColor })}>
+				<SuiBox
+					bgColor="white"
+					width="2rem"
+					height="2rem"
+					borderRadius="md"
+					shadow="md"
+					mb={2}
+					sx={cardIconBox}
+				>
+					<Icon
+						fontSize="medium"
+						sx={(theme) => cardIcon(theme, { sidenavColor })}
+					>
+						star
+					</Icon>
+				</SuiBox>
+				<SuiBox lineHeight={1}>
+					<SuiTypography variant="h6" color="white">
+						Need help?
+					</SuiTypography>
+					<SuiBox mb={1.825} mt={-1}>
+						<SuiTypography
+							variant="caption"
+							color="white"
+							fontWeight="medium"
+						>
+							Please check our docs
+						</SuiTypography>
+					</SuiBox>
+					<SuiButton
+						component={Link}
+						href="https://www.creative-tim.com/learning-lab/react/quick-start/soft-ui-dashboard/"
+						target="_blank"
+						rel="noreferrer"
+						size="small"
+						color="white"
+						fullWidth
+					>
+						documentation
+					</SuiButton>
+				</SuiBox>
+			</CardContent>
+		</Card>
+	);
+}
+
+function SidenavCollapse({
+	controller,
+	color,
+	icon,
+	name,
+	children,
+	active,
+	noCollapse,
+	open,
+	...rest
+}) {
+	//const [controller] = useSoftUIController();
+	const { miniSidenav, transparentSidenav } = controller;
+
+	return (
+		<>
+			<ListItem component="li">
+				<SuiBox
+					{...rest}
+					sx={(theme) =>
+						collapseItem(theme, { active, transparentSidenav })
+					}
+				>
+					<ListItemIcon
+						sx={(theme) =>
+							collapseIconBox(theme, {
+								active,
+								transparentSidenav,
+								color,
+							})
+						}
+					>
+						{typeof icon === "string" ? (
+							<Icon
+								sx={(theme) => collapseIcon(theme, { active })}
+							>
+								{icon}
+							</Icon>
+						) : (
+							icon
+						)}
+					</ListItemIcon>
+
+					<ListItemText
+						primary={name}
+						sx={(theme) =>
+							collapseText(theme, {
+								miniSidenav,
+								transparentSidenav,
+								active,
+							})
+						}
+					/>
+
+					<ArrowDropUpIcon
+						sx={(theme) =>
+							collapseArrow(theme, {
+								noCollapse,
+								transparentSidenav,
+								miniSidenav,
+								open,
+							})
+						}
+					></ArrowDropUpIcon>
+				</SuiBox>
+			</ListItem>
+			{children && (
+				<Collapse in={open} unmountOnExit>
+					{children}
+				</Collapse>
+			)}
+		</>
+	);
+}
+
+// Setting default values for the props of SidenavCollapse
+SidenavCollapse.defaultProps = {
+	color: "info",
+	active: false,
+	noCollapse: false,
+	children: false,
+	open: false,
+};
+
+function SidenavItem({
+	controller,
+	name,
+	active,
+	nested,
+	children,
+	open,
+	...rest
+}) {
+	//const [controller] = useSoftUIController();
+	const { miniSidenav } = controller;
+
+	return (
+		<>
+			<ListItem {...rest} component="li" sx={item}>
+				<SuiBox
+					sx={(theme) =>
+						itemContent(theme, {
+							active,
+							miniSidenav,
+							name,
+							nested,
+						})
+					}
+				>
+					<ListItemText primary={name} />
+					{children && (
+						<ArrowDropUpIcon
+							component="i"
+							sx={(theme) =>
+								itemArrow(theme, { open, miniSidenav })
+							}
+						></ArrowDropUpIcon>
+					)}
+				</SuiBox>
+			</ListItem>
+			{children && (
+				<Collapse in={open} timeout="auto" unmountOnExit>
+					{children}
+				</Collapse>
+			)}
+		</>
+	);
+}
+
+// Setting default values for the props of SidenavItem
+SidenavItem.defaultProps = {
+	active: false,
+	nested: false,
+	children: false,
+	open: false,
+};
+
+function SidenavList({ children }) {
+	return (
+		<List
+			sx={{
+				pl: 2,
+				ml: 3,
+			}}
+		>
+			{children}
+		</List>
+	);
+}
+
+const SidenavRoot = styled(Drawer)(({ theme, ownerState }) => {
+	const { palette, boxShadows, transitions, breakpoints, functions } = theme;
+	const { transparentSidenav, miniSidenav } = ownerState;
+
+	const sidebarWidth = 250;
+	const { white, transparent } = palette;
+	const { xxl } = boxShadows;
+	const { pxToRem } = functions;
+
+	// styles for the sidenav when miniSidenav={false}
+	const drawerOpenStyles = () => ({
+		transform: "translateX(0)",
+		transition: transitions.create("transform", {
+			easing: transitions.easing.sharp,
+			duration: transitions.duration.shorter,
+		}),
+
+		[breakpoints.up("xl")]: {
+			backgroundColor: transparentSidenav ? transparent.main : white.main,
+			boxShadow: transparentSidenav ? "none" : xxl,
+			marginBottom: transparentSidenav ? 0 : "inherit",
+			left: "0",
+			width: sidebarWidth,
+			transform: "translateX(0)",
+			transition: transitions.create(["width", "background-color"], {
+				easing: transitions.easing.sharp,
+				duration: transitions.duration.enteringScreen,
+			}),
+		},
+	});
+
+	// styles for the sidenav when miniSidenav={true}
+	const drawerCloseStyles = () => ({
+		transform: `translateX(${pxToRem(-320)})`,
+		transition: transitions.create("transform", {
+			easing: transitions.easing.sharp,
+			duration: transitions.duration.shorter,
+		}),
+
+		[breakpoints.up("xl")]: {
+			backgroundColor: transparentSidenav ? transparent.main : white.main,
+			boxShadow: transparentSidenav ? "none" : xxl,
+			marginBottom: transparentSidenav ? 0 : "inherit",
+			left: "0",
+			width: pxToRem(96),
+			overflowX: "hidden",
+			transform: "translateX(0)",
+			transition: transitions.create(["width", "background-color"], {
+				easing: transitions.easing.sharp,
+				duration: transitions.duration.shorter,
+			}),
+		},
+	});
+
+	return {
+		"& .MuiDrawer-paper": {
+			boxShadow: xxl,
+			border: "none",
+
+			...(miniSidenav ? drawerCloseStyles() : drawerOpenStyles()),
+		},
+	};
+});
+
+export function Sidenav({
+	controller,
+	setController,
+	color,
+	brand,
+	brandName,
+	routes,
+	...rest
+}) {
+	const [openCollapse, setOpenCollapse] = useState(false);
+	const [openNestedCollapse, setOpenNestedCollapse] = useState(false);
+	//const [controller, dispatch] = useSoftUIController();
+	const { miniSidenav, transparentSidenav } = controller;
+	const location = useLocation();
+	const { pathname } = location;
+	const collapseName = pathname.split("/").slice(1)[0];
+	const itemName = pathname.split("/").slice(1)[1];
+
+	const closeSidenav = () =>
+		setController({ ...controller, miniSidenav: true }); //setMiniSidenav(dispatch, true);
+
+	useEffect(() => {
+		// A function that sets the mini state of the sidenav.
+		function handleMiniSidenav() {
+			setController({
+				...controller,
+				miniSidenav: window.innerWidth < 1200,
+			});
+			// setMiniSidenav(dispatch, window.innerWidth < 1200);
+		}
+
+		/** 
+     The event listener that's calling the handleMiniSidenav function when resizing the window.
+    */
+		window.addEventListener("resize", handleMiniSidenav);
+
+		// Call the handleMiniSidenav function to set the state with the initial value.
+		handleMiniSidenav();
+
+		// Remove event listener on cleanup
+		return () => window.removeEventListener("resize", handleMiniSidenav);
+	}, [location]);
+
+	// Render all the nested collapse items from the routes.js
+	const renderNestedCollapse = (collapse) => {
+		const template = collapse.map(({ name, route, key, href }) =>
+			href ? (
+				<Link
+					key={key}
+					href={href}
+					target="_blank"
+					rel="noreferrer"
+					sx={{ textDecoration: "none" }}
+				>
+					<SidenavItem controller={controller} name={name} nested />
+				</Link>
+			) : (
+				<NavLink to={route} key={key} sx={{ textDecoration: "none" }}>
+					<SidenavItem
+						controller={controller}
+						name={name}
+						active={route === pathname}
+						nested
+					/>
+				</NavLink>
+			)
+		);
+
+		return template;
+	};
+
+	// Render the all the collpases from the routes.js
+	const renderCollapse = (collapses) =>
+		collapses.map(({ name, collapse, route, href, key }) => {
+			let returnValue;
+
+			if (collapse) {
+				returnValue = (
+					<SidenavItem
+						controller={controller}
+						key={key}
+						name={name}
+						active={key === itemName}
+						open={openNestedCollapse === name}
+						onClick={() =>
+							openNestedCollapse === name
+								? setOpenNestedCollapse(false)
+								: setOpenNestedCollapse(name)
+						}
+					>
+						{renderNestedCollapse(collapse)}
+					</SidenavItem>
+				);
+			} else {
+				returnValue = href ? (
+					<Link
+						href={href}
+						key={key}
+						target="_blank"
+						rel="noreferrer"
+						sx={{ textDecoration: "none" }}
+					>
+						<SidenavItem
+							controller={controller}
+							name={name}
+							active={key === itemName}
+						/>
+					</Link>
+				) : (
+					<NavLink
+						to={route}
+						key={key}
+						sx={{ textDecoration: "none" }}
+					>
+						<SidenavItem
+							controller={controller}
+							name={name}
+							active={key === itemName}
+						/>
+					</NavLink>
+				);
+			}
+			return <SidenavList key={key}>{returnValue}</SidenavList>;
+		});
+
+	// Render all the routes from the routes.js (All the visible items on the Sidenav)
+	const renderRoutes = routes.map(
+		({ type, name, icon, title, collapse, noCollapse, key, href }) => {
+			let returnValue;
+
+			if (type === "collapse") {
+				returnValue = href ? (
+					<Link
+						href={href}
+						key={key}
+						target="_blank"
+						rel="noreferrer"
+						sx={{ textDecoration: "none" }}
+					>
+						<SidenavCollapse
+							controller={controller}
+							color={color}
+							name={name}
+							icon={icon}
+							active={key === collapseName}
+							noCollapse={noCollapse}
+						/>
+					</Link>
+				) : (
+					<SidenavCollapse
+						controller={controller}
+						color={color}
+						key={key}
+						name={name}
+						icon={icon}
+						active={key === collapseName}
+						open={openCollapse === name}
+						onClick={() =>
+							openCollapse === name
+								? setOpenCollapse(false)
+								: setOpenCollapse(name)
+						}
+					>
+						{collapse ? renderCollapse(collapse) : null}
+					</SidenavCollapse>
+				);
+			} else if (type === "title") {
+				returnValue = (
+					<SuiTypography
+						key={key}
+						display="block"
+						variant="caption"
+						fontWeight="bold"
+						textTransform="uppercase"
+						opacity={0.6}
+						pl={3}
+						mt={2}
+						mb={1}
+						ml={1}
+					>
+						{title}
+					</SuiTypography>
+				);
+			} else if (type === "divider") {
+				returnValue = <Divider key={key} />;
+			}
+
+			return returnValue;
+		}
+	);
+
+	return (
+		<SidenavRoot
+			{...rest}
+			variant="permanent"
+			ownerState={{ transparentSidenav, miniSidenav }}
+		>
+			<SuiBox pt={3} pb={1} px={4} textAlign="center">
+				<SuiBox
+					display={{ xs: "block", xl: "none" }}
+					position="absolute"
+					top={0}
+					right={0}
+					p={1.625}
+					onClick={closeSidenav}
+					sx={{ cursor: "pointer" }}
+				>
+					<SuiTypography variant="h6" color="secondary">
+						<Icon sx={{ fontWeight: "bold" }}>close</Icon>
+					</SuiTypography>
+				</SuiBox>
+				<SuiBox
+					component={NavLink}
+					to="/"
+					display="flex"
+					alignItems="center"
+				>
+					{brand && (
+						<SuiBox
+							component="img"
+							src={brand}
+							alt="Soft UI Logo"
+							width="2rem"
+						/>
+					)}
+					<SuiBox
+						width={!brandName && "100%"}
+						sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}
+					>
+						<SuiTypography
+							component="h6"
+							variant="button"
+							fontWeight="medium"
+						>
+							{brandName}
+						</SuiTypography>
+					</SuiBox>
+				</SuiBox>
+			</SuiBox>
+			<Divider />
+			<List>{renderRoutes}</List>
+
+			<SuiBox pt={2} my={2} mx={2}>
+				<SidenavCard controller={controller} />
+			</SuiBox>
+		</SidenavRoot>
+	);
+}
+
+// Setting default values for the props of Sidenav
+Sidenav.defaultProps = {
+	color: "info",
+	brand: "",
+};
 const SuiTypographyRoot = styled(Typography)(({ theme, ownerState }) => {
 	const { palette, typography, functions } = theme;
 	const {
@@ -627,6 +1938,591 @@ SuiAvatar.defaultProps = {
 	bgColor: "transparent",
 	size: "md",
 	shadow: "none",
+};
+
+const SuiInputWithIconRoot = styled("div")(({ theme, ownerState }) => {
+	const { palette, functions, borders } = theme;
+	const { error, success, disabled } = ownerState;
+
+	const { inputColors, grey, white } = palette;
+	const { pxToRem } = functions;
+	const { borderRadius, borderWidth } = borders;
+
+	// border color value
+	let borderColorValue = inputColors.borderColor.main;
+
+	if (error) {
+		borderColorValue = inputColors.error;
+	} else if (success) {
+		borderColorValue = inputColors.success;
+	}
+
+	return {
+		display: "flex",
+		alignItems: "center",
+		backgroundColor: disabled ? grey[200] : white.main,
+		border: `${borderWidth[1]} solid`,
+		borderRadius: borderRadius.md,
+		borderColor: borderColorValue,
+
+		"& .MuiInputBase-input": {
+			height: pxToRem(20),
+		},
+	};
+});
+
+const SuiInputRoot = styled(InputBase)(({ theme, ownerState }) => {
+	const { palette, boxShadows, functions, typography, borders } = theme;
+	const { size, error, success, iconDirection, direction, disabled } =
+		ownerState;
+
+	const { inputColors, grey, white, transparent } = palette;
+	const { inputBoxShadow } = boxShadows;
+	const { pxToRem, boxShadow } = functions;
+	const { size: fontSize } = typography;
+	const { borderRadius } = borders;
+
+	// styles for the input with size="small"
+	const smallStyles = () => ({
+		fontSize: fontSize.xs,
+		padding: `${pxToRem(4)} ${pxToRem(12)}`,
+	});
+
+	// styles for the input with size="large"
+	const largeStyles = () => ({
+		padding: pxToRem(12),
+	});
+
+	// styles for the focused state of the input
+	let focusedBorderColorValue = inputColors.borderColor.focus;
+
+	if (error) {
+		focusedBorderColorValue = inputColors.error;
+	} else if (success) {
+		focusedBorderColorValue = inputColors.success;
+	}
+
+	let focusedPaddingLeftValue;
+
+	if (direction === "rtl" && iconDirection === "left") {
+		focusedPaddingLeftValue = pxToRem(12);
+	} else if (direction === "rtl" && iconDirection === "right") {
+		focusedPaddingLeftValue = pxToRem(12);
+	} else if (direction === "ltr" && iconDirection === "right") {
+		focusedPaddingLeftValue = pxToRem(12);
+	} else if (direction === "ltr" && iconDirection === "left") {
+		focusedPaddingLeftValue = pxToRem(12);
+	}
+
+	let focusedPaddingRightValue;
+
+	if (direction === "rtl" && iconDirection === "left") {
+		focusedPaddingRightValue = pxToRem(12);
+	} else if (direction === "rtl" && iconDirection === "right") {
+		focusedPaddingRightValue = pxToRem(12);
+	} else if (direction === "ltr" && iconDirection === "right") {
+		focusedPaddingRightValue = pxToRem(12);
+	} else if (direction === "ltr" && iconDirection === "left") {
+		focusedPaddingRightValue = pxToRem(12);
+	}
+
+	let focusedBoxShadowValue = boxShadow(
+		[0, 0],
+		[0, 2],
+		inputColors.boxShadow,
+		1
+	);
+
+	if (error) {
+		focusedBoxShadowValue = inputBoxShadow.error;
+	} else if (success) {
+		focusedBoxShadowValue = inputBoxShadow.success;
+	}
+
+	// styles for the input with error={true}
+	const errorStyles = () => ({
+		backgroundImage:
+			"url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23fd5c70' viewBox='0 0 12 12'%3E%3Ccircle cx='6' cy='6' r='4.5'/%3E%3Cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3E%3Ccircle cx='6' cy='8.2' r='.6' fill='%23fd5c70' stroke='none'/%3E%3C/svg%3E\")",
+		backgroundRepeat: "no-repeat",
+		backgroundPosition: `right ${pxToRem(12)} center`,
+		backgroundSize: `${pxToRem(16)} ${pxToRem(16)}`,
+		borderColor: inputColors.error,
+	});
+
+	// styles for the input with success={true}
+	const successStyles = () => ({
+		backgroundImage:
+			"url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 8'%3E%3Cpath fill='%2366d432' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E\")",
+		backgroundRepeat: "no-repeat",
+		backgroundPosition: `right ${pxToRem(12)} center`,
+		backgroundSize: `${pxToRem(16)} ${pxToRem(16)}`,
+		borderColor: inputColors.success,
+	});
+
+	// styles for the input containing an icon
+	const withIconStyles = () => {
+		let withIconBorderRadiusValue = `0 ${borderRadius.md} ${borderRadius.md} 0`;
+
+		if (direction === "rtl" && iconDirection === "left") {
+			withIconBorderRadiusValue = `0 ${borderRadius.md} ${borderRadius.md} 0`;
+		} else if (direction === "rtl" && iconDirection === "right") {
+			withIconBorderRadiusValue = `${borderRadius.md} 0 0 ${borderRadius.md}`;
+		} else if (direction === "ltr" && iconDirection === "right") {
+			withIconBorderRadiusValue = `${borderRadius.md} 0 0 ${borderRadius.md}`;
+		}
+
+		let withIconPaddingLeftValue;
+		if (direction === "rtl" && iconDirection === "left") {
+			withIconPaddingLeftValue = 0;
+		} else if (direction === "rtl" && iconDirection === "right") {
+			withIconPaddingLeftValue = pxToRem(12);
+		} else if (direction === "ltr" && iconDirection === "right") {
+			withIconPaddingLeftValue = pxToRem(12);
+		} else if (direction === "ltr" && iconDirection === "left") {
+			withIconPaddingLeftValue = 0;
+		}
+
+		let withIconPaddingRightValue;
+
+		if (direction === "rtl" && iconDirection === "left") {
+			withIconPaddingRightValue = pxToRem(12);
+		} else if (direction === "rtl" && iconDirection === "right") {
+			withIconPaddingRightValue = 0;
+		} else if (direction === "ltr" && iconDirection === "right") {
+			withIconPaddingRightValue = 0;
+		} else if (direction === "ltr" && iconDirection === "left") {
+			withIconPaddingRightValue = pxToRem(12);
+		}
+
+		return {
+			borderColor: transparent.main,
+			borderRadius: withIconBorderRadiusValue,
+			paddingLeft: withIconPaddingLeftValue,
+			paddingRight: withIconPaddingRightValue,
+		};
+	};
+
+	return {
+		backgroundColor: disabled ? `${grey[200]} !important` : white.main,
+		pointerEvents: disabled ? "none" : "auto",
+		...(size === "small" && smallStyles()),
+		...(size === "large" && largeStyles()),
+		...(error && errorStyles()),
+		...(success && successStyles()),
+		...((iconDirection === "left" || iconDirection === "right") &&
+			withIconStyles()),
+
+		"&.Mui-focused": {
+			borderColor: focusedBorderColorValue,
+			paddingLeft: focusedPaddingLeftValue,
+			paddingRight: focusedPaddingRightValue,
+			boxShadow: focusedBoxShadowValue,
+			outline: 0,
+		},
+
+		"&.MuiInputBase-multiline": {
+			padding: `${pxToRem(10)} ${pxToRem(12)}`,
+		},
+	};
+});
+
+const SuiInputIconRoot = styled(Icon)(({ theme, ownerState }) => {
+	const { typography } = theme;
+	const { size } = ownerState;
+
+	const { fontWeightBold, size: fontSize } = typography;
+
+	return {
+		fontWeight: fontWeightBold,
+		fontSize: size === "small" && `${fontSize.md} !important`,
+	};
+});
+
+const SuiInputIconBoxRoot = styled("div")(({ theme, ownerState }) => {
+	const { palette, functions } = theme;
+	const { size } = ownerState;
+
+	const { dark } = palette;
+	const { pxToRem } = functions;
+
+	return {
+		lineHeight: 0,
+		padding:
+			size === "small"
+				? `${pxToRem(4)} ${pxToRem(10)}`
+				: `${pxToRem(8)} ${pxToRem(10)}`,
+		width: pxToRem(39),
+		height: "100%",
+		color: dark.main,
+	};
+});
+
+const SuiInput = forwardRef(
+	({ controller, size, icon, error, success, disabled, ...rest }, ref) => {
+		let template;
+		//const [controller] = useSoftUIController();
+		const { direction } = controller;
+		const iconDirection = icon.direction;
+
+		if (icon.component && icon.direction === "left") {
+			template = (
+				<SuiInputWithIconRoot
+					ref={ref}
+					ownerState={{ error, success, disabled }}
+				>
+					<SuiInputIconBoxRoot ownerState={{ size }}>
+						<SuiInputIconRoot
+							fontSize="small"
+							ownerState={{ size }}
+						>
+							{icon.component}
+						</SuiInputIconRoot>
+					</SuiInputIconBoxRoot>
+					<SuiInputRoot
+						{...rest}
+						ownerState={{
+							size,
+							error,
+							success,
+							iconDirection,
+							direction,
+							disabled,
+						}}
+					/>
+				</SuiInputWithIconRoot>
+			);
+		} else if (icon.component && icon.direction === "right") {
+			template = (
+				<SuiInputWithIconRoot
+					ref={ref}
+					ownerState={{ error, success, disabled }}
+				>
+					<SuiInputRoot
+						{...rest}
+						ownerState={{
+							size,
+							error,
+							success,
+							iconDirection,
+							direction,
+							disabled,
+						}}
+					/>
+					<SuiInputIconBoxRoot ownerState={{ size }}>
+						<SuiInputIconRoot
+							fontSize="small"
+							ownerState={{ size }}
+						>
+							{icon.component}
+						</SuiInputIconRoot>
+					</SuiInputIconBoxRoot>
+				</SuiInputWithIconRoot>
+			);
+		} else {
+			template = (
+				<SuiInputRoot
+					{...rest}
+					ref={ref}
+					ownerState={{ size, error, success, disabled }}
+				/>
+			);
+		}
+
+		return template;
+	}
+);
+
+// Setting default values for the props of SuiInput
+SuiInput.defaultProps = {
+	size: "medium",
+	icon: {
+		component: false,
+		direction: "none",
+	},
+	error: false,
+	success: false,
+	disabled: false,
+};
+
+const SuiEditorRoot = styled("div")(({ theme }) => {
+	const { palette, borders, typography } = theme;
+
+	const { borderRadius } = borders;
+	const { size } = typography;
+	const { text } = palette;
+
+	return {
+		"& .ql-toolbar": {
+			borderRadius: `${borderRadius.md} ${borderRadius.md} 0 0`,
+		},
+
+		"& .ql-container": {
+			borderRadius: `0 0 ${borderRadius.md} ${borderRadius.md}`,
+		},
+
+		"& .ql-editor": {
+			"& p": {
+				fontSize: size.md,
+				color: text.main,
+			},
+
+			"& ul li": {
+				color: text.main,
+			},
+		},
+	};
+});
+
+function SuiEditor(props) {
+	return (
+		<SuiEditorRoot>
+			<ReactQuill theme="snow" {...props} />
+		</SuiEditorRoot>
+	);
+}
+
+const styles = (selectSize, selectError, selectSuccess) => {
+	const { dark, white, text, light, inputColors, gradients, transparent } =
+		colors;
+	const { size, fontWeightRegular } = typography;
+	const { borderWidth, borderRadius } = borders;
+	const { inputBoxShadow, lg } = boxShadows;
+
+	let borderColorValue;
+	let borderColorFocused;
+	let boxShadowValue;
+	let selectSizeValue;
+
+	if (selectError) {
+		borderColorValue = inputColors.error;
+		borderColorFocused = inputColors.error;
+	} else if (selectSuccess) {
+		borderColorValue = inputColors.success;
+		borderColorFocused = inputColors.success;
+	} else {
+		borderColorValue = inputColors.borderColor.main;
+		borderColorFocused = inputColors.borderColor.focus;
+	}
+
+	if (selectError) {
+		boxShadowValue = inputBoxShadow.error;
+	} else if (selectSuccess) {
+		boxShadowValue = inputBoxShadow.success;
+	} else {
+		boxShadowValue = boxShadow([0, 0], [0, 2], inputColors.boxShadow, 1);
+	}
+
+	if (selectSize === "small") {
+		selectSizeValue = pxToRem(32);
+	} else if (selectSize === "large") {
+		selectSizeValue = pxToRem(48);
+	} else {
+		selectSizeValue = pxToRem(40);
+	}
+
+	// animations
+	const prespective = keyframes`
+	  from {
+		opacity: 0;
+		transform: perspective(999px) rotateX(-10deg) translateZ(0) translate3d(0, 0, 0);
+	  }
+	  to {
+		opacity: 1;
+		transform: perspective(999px) rotateX(0deg) translateZ(0) translate3d(0, 0, 5px);
+	  }
+	`;
+
+	return {
+		control: (provided, state) => ({
+			display: "flex",
+			alignItems: "center",
+			width: "100%",
+			height: selectSizeValue,
+			padding: 0,
+			fontSize: selectSize === "small" ? size.xs : size.sm,
+			fontWeight: fontWeightRegular,
+			backgroundColor: transparent.main,
+			backgroundClip: "padding-box",
+			border: `${borderWidth[1]} solid ${inputColors.borderColor.main}`,
+			appearance: "none",
+			borderRadius: borderRadius.md,
+			transition: "box-shadow 150ms ease, border-color 150ms ease",
+			cursor: "pointer",
+			borderColor: state.isFocused
+				? borderColorFocused
+				: borderColorValue,
+			boxShadow: state.isFocused ? boxShadowValue : "none",
+		}),
+
+		valueContainer: () => ({
+			display: "flex",
+			alignItems: "center",
+			width: "100%",
+			height: "max-content",
+			padding: `0 ${pxToRem(12)}`,
+			color: dark.main,
+		}),
+
+		placeholder: () => ({
+			position: "absolute",
+			top: selectSize === "small" ? "52%" : "51%",
+			transform: "translateY(-50%)",
+			marginLeft: 0,
+			marginRight: 0,
+			color: dark.main,
+			opacity: 0.5,
+		}),
+
+		singleValue: () => ({
+			position: "absolute",
+			top: selectSize === "small" ? "52%" : "51%",
+			transform: "translateY(-50%)",
+			color: text.main,
+		}),
+
+		input: () => ({
+			color: dark.main,
+			position: "relative",
+			margin: 0,
+		}),
+
+		indicatorSeparator: () => ({
+			display: "none",
+		}),
+
+		dropdownIndicator: (provided, state) => ({
+			display: "flex",
+			padding: pxToRem(12),
+
+			"& svg": {
+				fill: text.main,
+				width: pxToRem(14),
+				height: pxToRem(14),
+				strokeWidth: 1,
+				stroke: text.main,
+				transform: state.selectProps.menuIsOpen
+					? "rotate(180deg)"
+					: "rotate(0)",
+				transition: "transform 250ms ease",
+			},
+		}),
+
+		menu: (provided) => ({
+			...provided,
+			minWidth: pxToRem(160),
+			boxShadow: lg,
+			padding: `${pxToRem(16)} ${pxToRem(8)}`,
+			fontSize: size.sm,
+			color: text.main,
+			textAlign: "left",
+			backgroundColor: white.main,
+			borderRadius: borderRadius.md,
+			transformOrigin: "50% 0",
+			animation: `${prespective} 250ms ease forwards !important`,
+		}),
+
+		menuList: (provided) => ({
+			...provided,
+			padding: 0,
+		}),
+
+		option: (provided, state) => ({
+			...provided,
+			position: "relative",
+			minWidth: pxToRem(160),
+			minHeight: "unset",
+			padding: `${pxToRem(4.8)} ${pxToRem(100)} ${pxToRem(4.8)} ${pxToRem(
+				16
+			)}`,
+			borderRadius: borderRadius.md,
+			fontSize: size.sm,
+			color: text.main,
+			cursor: state.isDisabled ? "not-allowed" : "pointer",
+			opacity: state.isDisabled ? 0.5 : 1,
+			userSelect: state.isDisabled ? "none" : "auto",
+			transition: "background-color 300ms ease, color 300ms ease",
+
+			"&:after": {
+				content: "'Press to select'",
+				display: "block",
+				fontSize: size.xs,
+				position: "absolute",
+				right: pxToRem(10),
+				top: "52%",
+				color: text.main,
+				opacity: 0,
+				transform: "translateY(-50%)",
+				transition: "opacity 300ms ease",
+			},
+
+			"&:hover, &:focus": {
+				backgroundColor: state.isDisabled
+					? transparent.main
+					: light.main,
+				color: state.isDisabled ? "currentColor" : dark.main,
+
+				"&:after": {
+					content: state.isDisabled && "''",
+					opacity: 0.5,
+				},
+			},
+		}),
+
+		multiValue: (provided) => ({
+			...provided,
+			margin: 0,
+			marginRight: pxToRem(4),
+			borderRadius: borderRadius.section,
+			display: "flex",
+			alignItems: "center",
+			backgroundColor: gradients.dark.state,
+			color: white.main,
+			padding: `${pxToRem(2)} 0 ${pxToRem(2)} ${pxToRem(4)}`,
+
+			"& div:first-of-type": {
+				color: white.main,
+				paddingTop: pxToRem(4),
+				paddingBottom: pxToRem(2),
+			},
+
+			"& div:last-of-type": {
+				paddingTop: pxToRem(1.5),
+				opacity: 0.8,
+
+				"&:hover": {
+					backgroundColor: transparent.main,
+					color: white.main,
+				},
+			},
+		}),
+	};
+};
+
+const SuiSelect = forwardRef(({ size, error, success, ...rest }, ref) => {
+	const { light } = colors;
+
+	return (
+		<Select
+			{...rest}
+			ref={ref}
+			styles={styles(size, error, success)}
+			theme={(theme) => ({
+				...theme,
+				colors: {
+					...theme.colors,
+					primary25: light.main,
+					primary: light.main,
+				},
+			})}
+		/>
+	);
+});
+
+// Setting default values for the props of SuiSelect
+SuiSelect.defaultProps = {
+	size: "medium",
+	error: false,
+	success: false,
 };
 
 function EventCard({ id, image, title, dateTime, description, action }) {
@@ -1197,49 +3093,41 @@ export function ComplexProjectCard({
 						{description}
 					</SuiTypography>
 				</SuiBox>
-				<Divider />
-				<SuiBox
-					display="flex"
-					justifyContent="space-between"
-					alignItems="center"
-				>
-					{dateTime ? (
-						<SuiBox
-							display="flex"
-							flexDirection="column"
-							lineHeight={0}
-						>
-							<SuiTypography variant="button" fontWeight="medium">
-								{dateTime}
-							</SuiTypography>
-							<SuiTypography
-								variant="button"
-								fontWeight="medium"
-								color="secondary"
-							>
-								Due date
-							</SuiTypography>
-						</SuiBox>
-					) : null}
-					{dateTime ? (
-						<SuiBox
-							display="flex"
-							flexDirection="column"
-							lineHeight={0}
-						>
-							<SuiTypography variant="button" fontWeight="medium">
-								{dateTime}
-							</SuiTypography>
-							<SuiTypography
-								variant="button"
-								fontWeight="medium"
-								color="secondary"
-							>
-								Due date
-							</SuiTypography>
-						</SuiBox>
-					) : null}
-				</SuiBox>
+				{/* <Divider />
+        <SuiBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {dateTime ? (
+            <SuiBox display="flex" flexDirection="column" lineHeight={0}>
+              <SuiTypography variant="button" fontWeight="medium">
+                {dateTime}
+              </SuiTypography>
+              <SuiTypography
+                variant="button"
+                fontWeight="medium"
+                color="secondary"
+              >
+                Due date
+              </SuiTypography>
+            </SuiBox>
+          ) : null}
+          {dateTime ? (
+            <SuiBox display="flex" flexDirection="column" lineHeight={0}>
+              <SuiTypography variant="button" fontWeight="medium">
+                {dateTime}
+              </SuiTypography>
+              <SuiTypography
+                variant="button"
+                fontWeight="medium"
+                color="secondary"
+              >
+                Due date
+              </SuiTypography>
+            </SuiBox>
+          ) : null}
+        </SuiBox> */}
 			</SuiBox>
 		</Card>
 	);
@@ -1405,6 +3293,181 @@ export function AutomotiveDetails() {
 		</SuiBox>
 	);
 }
+export function PageLayout({ background, children }) {
+	// const [, dispatch] = useSoftUIController();
+	// const { pathname } = useLocation();
+
+	// useEffect(() => {
+	//   setLayout(dispatch, "page");
+	// }, [pathname]);
+
+	return (
+		<SuiBox
+			width="100vw"
+			height="100%"
+			minHeight="100vh"
+			bgColor={background}
+			sx={{ overflowX: "hidden" }}
+		>
+			{children}
+		</SuiBox>
+	);
+}
+
+// Setting default values for the props for PageLayout
+PageLayout.defaultProps = {
+	background: "default",
+};
+
+export function BasicLayout({ title, description, image, children }) {
+	return (
+		<PageLayout>
+			{/* <DefaultNavbar
+        routes={pageRoutes}
+        action={{
+          type: "external",
+          route: "https://creative-tim.com/product/soft-ui-dashboard-pro-react",
+          label: "buy now",
+        }}
+        transparent
+        light
+      /> */}
+			<SuiBox
+				width="calc(100% - 2rem)"
+				minHeight="50vh"
+				borderRadius="lg"
+				mx={2}
+				my={2}
+				pt={6}
+				pb={28}
+				sx={{
+					backgroundImage: ({
+						functions: { linearGradient, rgba },
+						palette: { gradients },
+					}) =>
+						image &&
+						`${linearGradient(
+							rgba(gradients.dark.main, 0.6),
+							rgba(gradients.dark.state, 0.6)
+						)}, url(${image})`,
+					backgroundSize: "cover",
+					backgroundPosition: "center",
+					backgroundRepeat: "no-repeat",
+				}}
+			>
+				<Grid
+					container
+					spacing={3}
+					justifyContent="center"
+					sx={{ textAlign: "center" }}
+				>
+					<Grid item xs={10} lg={4}>
+						<SuiBox mt={6} mb={1}>
+							<SuiTypography
+								variant="h1"
+								color="white"
+								fontWeight="bold"
+							>
+								{title}
+							</SuiTypography>
+						</SuiBox>
+						<SuiBox mb={2}>
+							<SuiTypography
+								variant="body2"
+								color="white"
+								fontWeight="regular"
+							>
+								{description}
+							</SuiTypography>
+						</SuiBox>
+					</Grid>
+				</Grid>
+			</SuiBox>
+
+			<SuiBox
+				mt={{ xs: -26, lg: -24 }}
+				px={1}
+				width="calc(100% - 2rem)"
+				mx="auto"
+			>
+				<Grid container spacing={1} justifyContent="center">
+					<Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
+						{children}
+					</Grid>
+				</Grid>
+			</SuiBox>
+			<Footer />
+		</PageLayout>
+	);
+}
+
+// Setting default values for the props of BasicLayout
+BasicLayout.defaultProps = {
+	title: "",
+	description: "",
+};
+
+export function Basic({ children }) {
+	const [rememberMe, setRememberMe] = useState(false);
+
+	const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+	return (
+		<BasicLayout
+			title="Welcome!"
+			description="Use these awesome forms to login or create new account in your project for free."
+			image={curved9}
+		>
+			{children}
+			{/* <Card> */}
+			{/* <SuiBox p={3} mb={1} textAlign="center">
+          <SuiTypography variant="h5" fontWeight="medium">
+            Sign in
+          </SuiTypography>
+        </SuiBox>
+        <SuiBox mb={2}><Socials /></SuiBox> */}
+			{/* <SuiBox p={3}>
+          <SuiBox component="form" role="form">
+            <SuiBox mb={2}>
+              <SuiInput type="email" placeholder="Email" />
+            </SuiBox>
+            <SuiBox mb={2}>
+              <SuiInput type="password" placeholder="Password" />
+            </SuiBox>
+            <SuiBox display="flex" alignItems="center">
+              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
+              <SuiTypography
+                variant="button"
+                fontWeight="regular"
+                onClick={handleSetRememberMe}
+                sx={{ cursor: "pointer", userSelect: "none" }}
+              >
+                &nbsp;&nbsp;Remember me
+              </SuiTypography>
+            </SuiBox>
+            <SuiBox mt={4} mb={1}>
+              <SuiButton variant="gradient" color="info" fullWidth>
+                sign in
+              </SuiButton>
+            </SuiBox>
+            <Separator />
+            <SuiBox mt={1} mb={3}>
+              <SuiButton
+                component={Link}
+                to="/authentication/sign-up/basic"
+                variant="gradient"
+                color="dark"
+                fullWidth
+              >
+                sign up
+              </SuiButton>
+            </SuiBox>
+          </SuiBox>
+        </SuiBox> */}
+			{/* </Card> */}
+		</BasicLayout>
+	);
+}
 
 export const DashboardLayout = ({ children }) => {
 	return (
@@ -1440,6 +3503,152 @@ export const DashboardLayout = ({ children }) => {
 			}}
 		</PropsContext.Consumer>
 	);
+};
+
+export const TabsTopOriginal = () => {
+	const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+	const [tabValue, setTabValue] = useState(0);
+	useEffect(() => {
+		// A function that sets the orientation state of the tabs.
+		function handleTabsOrientation() {
+			return window.innerWidth < breakpoints.values.sm
+				? setTabsOrientation("vertical")
+				: setTabsOrientation("horizontal");
+		}
+
+		/** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+		window.addEventListener("resize", handleTabsOrientation);
+
+		// Call the handleTabsOrientation function to set the state with the initial value.
+		handleTabsOrientation();
+
+		// Remove event listener on cleanup
+		return () =>
+			window.removeEventListener("resize", handleTabsOrientation);
+	}, [tabsOrientation]);
+
+	const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+
+	return (
+		<Grid container>
+			<Grid item xs={12} sm={8} lg={4}>
+				<AppBar position="static">
+					<Tabs
+						orientation={tabsOrientation}
+						value={tabValue}
+						onChange={handleSetTabValue}
+					>
+						<Tab label="Summary" />
+						<Tab label="Form" />
+					</Tabs>
+				</AppBar>
+			</Grid>
+		</Grid>
+	);
+};
+export const TabsTop = ({ pageData, setPageData }) => {
+	const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+	//const [tabValue, setTabValue] = useState(0);
+	useEffect(() => {
+		// A function that sets the orientation state of the tabs.
+		function handleTabsOrientation() {
+			return window.innerWidth < breakpoints.values.sm
+				? setTabsOrientation("vertical")
+				: setTabsOrientation("horizontal");
+		}
+
+		/** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+		window.addEventListener("resize", handleTabsOrientation);
+
+		// Call the handleTabsOrientation function to set the state with the initial value.
+		handleTabsOrientation();
+
+		// Remove event listener on cleanup
+		return () =>
+			window.removeEventListener("resize", handleTabsOrientation);
+	}, [tabsOrientation]);
+
+	const handleSetTabValue = (event, newValue) =>
+		setPageData({ ...pageData, tabValue: newValue });
+
+	return (
+		<Grid container>
+			<Grid item xs={12} sm={8} lg={4}>
+				<AppBar position="static">
+					<Tabs
+						orientation={tabsOrientation}
+						value={pageData.tabValue || 0}
+						onChange={handleSetTabValue}
+					>
+						<Tab label="Summary" />
+						<Tab label="Form" />
+					</Tabs>
+				</AppBar>
+			</Grid>
+		</Grid>
+	);
+};
+export function BaseLayout({ stickyNavbar, children }) {
+	const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+	const [tabValue, setTabValue] = useState(0);
+
+	useEffect(() => {
+		// A function that sets the orientation state of the tabs.
+		function handleTabsOrientation() {
+			return window.innerWidth < breakpoints.values.sm
+				? setTabsOrientation("vertical")
+				: setTabsOrientation("horizontal");
+		}
+
+		/** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+		window.addEventListener("resize", handleTabsOrientation);
+
+		// Call the handleTabsOrientation function to set the state with the initial value.
+		handleTabsOrientation();
+
+		// Remove event listener on cleanup
+		return () =>
+			window.removeEventListener("resize", handleTabsOrientation);
+	}, [tabsOrientation]);
+
+	const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+
+	return (
+		<DashboardLayout>
+			{/* <DashboardNavbar absolute={!stickyNavbar} isMini /> */}
+			<SuiBox mt={stickyNavbar ? 3 : 10}>
+				<Grid container>
+					<Grid item xs={12} sm={8} lg={4}>
+						<AppBar position="static">
+							<Tabs
+								orientation={tabsOrientation}
+								value={tabValue}
+								onChange={handleSetTabValue}
+							>
+								<Tab label="Messages" />
+								<Tab label="Social" />
+								<Tab label="Notifications" />
+								<Tab label="Backup" />
+							</Tabs>
+						</AppBar>
+					</Grid>
+				</Grid>
+				{children}
+			</SuiBox>
+			<Footer />
+		</DashboardLayout>
+	);
+}
+
+// Setting default values for the props of BaseLayout
+BaseLayout.defaultProps = {
+	stickyNavbar: false,
 };
 
 export function MiniStatisticsCard({
@@ -1555,6 +3764,31 @@ MiniStatisticsCard.defaultProps = {
 	},
 	direction: "right",
 };
+{
+	/* <Grid item xs={4} sm={3} md={2} lg={1} sx={{ flex: "0 0 100%" }}>
+<SuiBox
+  bgColor="info"
+  borderRadius="50%"
+  width="3.625rem"
+  height="3.625rem"
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  color="white"
+  mx="auto"
+  variant="gradient"
+  sx={{ cursor: "pointer" }}
+>
+  <Add />
+  <Icon fontSize="small">add</Icon>
+</SuiBox>
+<SuiBox mt={0.75} textAlign="center" lineHeight={1}>
+  <SuiTypography variant="button" color="text" fontWeight="regular">
+    Add Person
+  </SuiTypography>
+</SuiBox>
+</Grid> */
+}
 
 export function Stories({ storiesData }) {
 	const { borderWidth } = borders;
@@ -1606,40 +3840,6 @@ export function Stories({ storiesData }) {
 		<Card>
 			<SuiBox width="100%" pt={3} pb={2.5} px={3}>
 				<Grid container justifyContent="space-between" wrap="nowrap">
-					<Grid
-						item
-						xs={4}
-						sm={3}
-						md={2}
-						lg={1}
-						sx={{ flex: "0 0 100%" }}
-					>
-						<SuiBox
-							bgColor="info"
-							borderRadius="50%"
-							width="3.625rem"
-							height="3.625rem"
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							color="white"
-							mx="auto"
-							variant="gradient"
-							sx={{ cursor: "pointer" }}
-						>
-							<Add />
-							{/* <Icon fontSize="small">add</Icon> */}
-						</SuiBox>
-						<SuiBox mt={0.75} textAlign="center" lineHeight={1}>
-							<SuiTypography
-								variant="button"
-								color="text"
-								fontWeight="regular"
-							>
-								Add Person
-							</SuiTypography>
-						</SuiBox>
-					</Grid>
 					{renderStories}
 				</Grid>
 			</SuiBox>
@@ -1878,12 +4078,12 @@ export function SuiTable({ headers, rows, title }) {
 				>
 					<SuiButton
 						variant="outlined"
-						color="success"
+						color="white"
 						size="small"
 						circular
 						iconOnly
 					>
-						{/* <Icon sx={{ fontWeight: "bold" }}>done</Icon> */}
+						<Icon sx={{ fontWeight: "bold" }}>done</Icon>
 					</SuiButton>
 				</Tooltip>
 			</SuiBox>
@@ -2038,7 +4238,7 @@ function DataTableHeadCell({ width, children, sorted, align, ...rest }) {
 							color={sorted === "asce" ? "text" : "secondary"}
 							opacity={sorted === "asce" ? 1 : 0.5}
 						>
-							<Icon>arrow_drop_up</Icon>
+							<ArrowDropUpIcon></ArrowDropUpIcon>
 						</SuiBox>
 						<SuiBox
 							position="absolute"
@@ -2046,7 +4246,7 @@ function DataTableHeadCell({ width, children, sorted, align, ...rest }) {
 							color={sorted === "desc" ? "text" : "secondary"}
 							opacity={sorted === "desc" ? 1 : 0.5}
 						>
-							<Icon>arrow_drop_down</Icon>
+							<ArrowDropDownIcon></ArrowDropDownIcon>
 						</SuiBox>
 					</SuiBox>
 				)}
@@ -2228,6 +4428,7 @@ function DataTable({
 					{canSearch && (
 						<SuiBox width="12rem" ml="auto">
 							<SuiInput
+								controller={controller}
 								placeholder="Search..."
 								value={search}
 								onChange={({ currentTarget }) => {
@@ -2598,7 +4799,7 @@ const ConfiguratorRoot = styled(Drawer)(({ theme, ownerState }) => {
 	};
 });
 
-export function Configurator({ controller, setController }) {
+export function Configurator({ controller, setController, children }) {
 	// const [controller, dispatch] = useSoftUIController();
 	const {
 		openConfigurator,
@@ -2671,11 +4872,9 @@ export function Configurator({ controller, setController }) {
 				px={3}
 			>
 				<SuiBox>
-					<SuiTypography variant="h5">
-						Soft UI Configurator
-					</SuiTypography>
+					<SuiTypography variant="h5">Configurator</SuiTypography>
 					<SuiTypography variant="body2" color="text">
-						See our dashboard options.
+						Set options.
 					</SuiTypography>
 				</SuiBox>
 
@@ -2698,7 +4897,7 @@ export function Configurator({ controller, setController }) {
 			</SuiBox>
 
 			<Divider />
-
+			{children}
 			{/* <SuiBox pt={1.25} pb={3} px={3}>
 				<SuiBox>
 					<SuiTypography variant="h6">Sidenav Colors</SuiTypography>
@@ -2930,6 +5129,315 @@ export const ConfigurationButton = ({ handleConfiguratorOpen }) => {
 	);
 	return <Fragment>{configsButton}</Fragment>;
 };
+
+export function NewProject({ controller }) {
+	const [startDate, setStartDate] = useState(new Date());
+	const [endDate, setEndDate] = useState(new Date());
+	const [editorValue, setEditorValue] = useState(
+		"<p>Hello World!</p><p>Some initial <strong>bold</strong> text</p><br><br>"
+	);
+
+	const handleSetStartDate = (newDate) => setStartDate(newDate);
+	const handleSetEndDate = (newDate) => setEndDate(newDate);
+
+	return (
+		<SuiBox mt={3} mb={4}>
+			<Grid container spacing={3} justifyContent="center">
+				<Grid item xs={12} lg={9}>
+					<Card sx={{ overflow: "visible" }}>
+						<SuiBox p={2} lineHeight={1}>
+							<SuiTypography variant="h6" fontWeight="medium">
+								New Project
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								fontWeight="regular"
+								color="text"
+							>
+								Create new project
+							</SuiTypography>
+							<Divider />
+							<SuiBox
+								display="flex"
+								flexDirection="column"
+								justifyContent="flex-end"
+								height="100%"
+							>
+								<SuiBox
+									mb={1}
+									ml={0.5}
+									lineHeight={0}
+									display="inline-block"
+								>
+									<SuiTypography
+										component="label"
+										variant="caption"
+										fontWeight="bold"
+									>
+										Project Name
+									</SuiTypography>
+								</SuiBox>
+								<SuiInput
+									controller={controller}
+									placeholder="Soft UI Dashboard PRO Material"
+								/>
+							</SuiBox>
+							<SuiBox mt={3} mb={2}>
+								<Grid container spacing={3}>
+									<Grid item xs={12} md={6}>
+										<SuiBox
+											mb={1}
+											ml={0.5}
+											lineHeight={0}
+											display="inline-block"
+										>
+											<SuiTypography
+												component="label"
+												variant="caption"
+												fontWeight="bold"
+											>
+												Private Project
+											</SuiTypography>
+										</SuiBox>
+										<SuiBox pl={0.5} pb={1.5}>
+											<SuiTypography
+												component="label"
+												variant="caption"
+												fontWeight="regular"
+												color="text"
+											>
+												If you are available for hire
+												outside of the current
+												situation, you can encourage
+												others to hire you.
+											</SuiTypography>
+										</SuiBox>
+										<SuiBox ml={0.5} mb={0.25}>
+											<Switch />
+										</SuiBox>
+									</Grid>
+								</Grid>
+							</SuiBox>
+							<SuiBox
+								display="flex"
+								flexDirection="column"
+								justifyContent="flex-end"
+								height="100%"
+							>
+								<SuiBox
+									mb={1}
+									ml={0.5}
+									mt={3}
+									lineHeight={0}
+									display="inline-block"
+								>
+									<SuiTypography
+										component="label"
+										variant="caption"
+										fontWeight="bold"
+									>
+										Project Description
+									</SuiTypography>
+								</SuiBox>
+								<SuiBox
+									mb={1.5}
+									ml={0.5}
+									mt={0.5}
+									lineHeight={0}
+									display="inline-block"
+								>
+									<SuiTypography
+										component="label"
+										variant="caption"
+										fontWeight="regular"
+										color="text"
+									>
+										This is how others will learn about the
+										project, so make it good!
+									</SuiTypography>
+								</SuiBox>
+								<SuiEditor
+									value={editorValue}
+									onChange={setEditorValue}
+								/>
+							</SuiBox>
+							<SuiBox
+								display="flex"
+								flexDirection="column"
+								justifyContent="flex-end"
+								height="100%"
+							>
+								<SuiBox
+									mb={1}
+									ml={0.5}
+									mt={3}
+									lineHeight={0}
+									display="inline-block"
+								>
+									<SuiTypography
+										component="label"
+										variant="caption"
+										fontWeight="bold"
+									>
+										Project Tags
+									</SuiTypography>
+								</SuiBox>
+								<SuiSelect
+									defaultValue={[
+										{
+											value: "choice 1",
+											label: "Choice 1",
+										},
+										{
+											value: "label two",
+											label: "label two",
+										},
+									]}
+									options={[
+										{
+											value: "choice 1",
+											label: "Choice 1",
+										},
+										{
+											value: "choice 2",
+											label: "Choice 2",
+										},
+										{
+											value: "choice 3",
+											label: "Choice 3",
+										},
+										{
+											value: "choice 4",
+											label: "Choice 4",
+										},
+										{
+											value: "label one",
+											label: "Label One",
+											isDisabled: true,
+										},
+										{
+											value: "label two",
+											label: "Tabel Two",
+										},
+										{
+											value: "label three",
+											label: "Label Three",
+										},
+									]}
+									isMulti
+								/>
+							</SuiBox>
+							{/* 
+							
+
+
+
+								<Grid container spacing={3}>
+									<Grid item xs={6}>
+										<SuiBox
+											display="flex"
+											flexDirection="column"
+											justifyContent="flex-end"
+											height="100%"
+										>
+											<SuiBox
+												mb={1}
+												ml={0.5}
+												mt={3}
+												lineHeight={0}
+												display="inline-block"
+											>
+												<SuiTypography
+													component="label"
+													variant="caption"
+													fontWeight="bold"
+												>
+													Start Date
+												</SuiTypography>
+											</SuiBox>
+											<SuiDatePicker
+												value={startDate}
+												onChange={handleSetStartDate}
+											/>
+										</SuiBox>
+									</Grid>
+									<Grid item xs={6}>
+										<SuiBox
+											display="flex"
+											flexDirection="column"
+											justifyContent="flex-end"
+											height="100%"
+										>
+											<SuiBox
+												mb={1}
+												ml={0.5}
+												mt={3}
+												lineHeight={0}
+												display="inline-block"
+											>
+												<SuiTypography
+													component="label"
+													variant="caption"
+													fontWeight="bold"
+												>
+													End Date
+												</SuiTypography>
+											</SuiBox>
+											<SuiDatePicker
+												value={endDate}
+												onChange={handleSetEndDate}
+											/>
+										</SuiBox>
+									</Grid>
+								</Grid>
+								<SuiBox>
+									<SuiBox
+										display="flex"
+										flexDirection="column"
+										justifyContent="flex-end"
+										height="100%"
+									>
+										<SuiBox
+											mb={1}
+											ml={0.5}
+											mt={3}
+											lineHeight={0}
+											display="inline-block"
+										>
+											<SuiTypography
+												component="label"
+												variant="caption"
+												fontWeight="bold"
+											>
+												Starting Files
+											</SuiTypography>
+										</SuiBox>
+										<SuiDropzone
+											options={{ addRemoveLinks: true }}
+										/>
+									</SuiBox>
+								</SuiBox>
+								<SuiBox
+									display="flex"
+									justifyContent="flex-end"
+									mt={3}
+								>
+									<SuiBox mr={1}>
+										<SuiButton color="light">
+											cancel
+										</SuiButton>
+									</SuiBox>
+									<SuiButton variant="gradient" color="info">
+										create project
+									</SuiButton>
+								</SuiBox> */}
+						</SuiBox>
+					</Card>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+}
 
 export const Sandbox = () => {
 	const controller = {

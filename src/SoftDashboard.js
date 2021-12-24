@@ -60,6 +60,7 @@ import {
 	Footer,
 	ConfigurationButton,
 	Configurator,
+	NewProject,
 } from "./SoftElements";
 
 function EventCard({ id, image, title, dateTime, description, action }) {
@@ -156,7 +157,7 @@ function EventCard({ id, image, title, dateTime, description, action }) {
 // The Pagination main context
 const Context = createContext();
 
-const Dashboard = () => {
+const Dashboard = ({ controller }) => {
 	const { values } = breakpoints;
 	const { size } = typography;
 	const storiesData = [
@@ -177,7 +178,7 @@ const Dashboard = () => {
 				<SuiBox my={3}>
 					<Stories storiesData={storiesData} />
 				</SuiBox>
-
+				<NewProject controller={controller} />
 				<SuiBox pt={5} pb={2}>
 					<Grid container>
 						<Grid item xs={12} md={8}>
@@ -442,7 +443,7 @@ export const Sandbox = () => {
 					<ConfigurationButton
 						handleConfiguratorOpen={handleConfiguratorOpen}
 					/>
-					<Dashboard />
+					<Dashboard controller={controller} />
 				</PropsContext.Provider>
 			</ThemeProvider>
 		</Fragment>
