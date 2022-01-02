@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useMemo } from "react";
+import React, { Fragment, useEffect, useState, useMemo, useRef } from "react";
 import { forwardRef, createContext, useContext } from "react";
 
 // @mui material components
@@ -19,19 +19,33 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import InputBase from "@mui/material/InputBase";
 import Select from "react-select";
-
 import CardContent from "@mui/material/CardContent";
-
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import TableBody from "@mui/material/TableBody";
-
 import Collapse from "@mui/material/Collapse";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
+import Snackbar from "@mui/material/Snackbar";
+
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+
+import Toolbar from "@mui/material/Toolbar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
+
+//icons
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 // Images
 import mercedesEQC from "assets/images/mercedes-eqc.png";
@@ -48,7 +62,6 @@ import Typography from "@mui/material/Typography";
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
 
-import SettingsIcon from "@mui/icons-material/Settings";
 import CloseIcon from "@mui/icons-material/Close";
 // react-table components
 import {
@@ -937,11 +950,12 @@ function SidenavCollapse({
 						}
 					>
 						{typeof icon === "string" ? (
-							<Icon
-								sx={(theme) => collapseIcon(theme, { active })}
-							>
-								{icon}
-							</Icon>
+							<SuiBox
+								component="img"
+								src={icon}
+								alt="-"
+								width="1.8rem"
+							/>
 						) : (
 							icon
 						)}
@@ -1144,14 +1158,14 @@ export function Sidenav({
 		function handleMiniSidenav() {
 			setController({
 				...controller,
-				miniSidenav: window.innerWidth < 1200,
+				miniSidenav: window.innerWidth < 2600,
 			});
 			// setMiniSidenav(dispatch, window.innerWidth < 1200);
 		}
 
 		/** 
-     The event listener that's calling the handleMiniSidenav function when resizing the window.
-    */
+       The event listener that's calling the handleMiniSidenav function when resizing the window.
+      */
 		window.addEventListener("resize", handleMiniSidenav);
 
 		// Call the handleMiniSidenav function to set the state with the initial value.
@@ -1160,7 +1174,6 @@ export function Sidenav({
 		// Remove event listener on cleanup
 		return () => window.removeEventListener("resize", handleMiniSidenav);
 	}, [location]);
-
 	// Render all the nested collapse items from the routes.js
 	const renderNestedCollapse = (collapse) => {
 		const template = collapse.map(({ name, route, key, href }) =>
@@ -1360,9 +1373,9 @@ export function Sidenav({
 			<Divider />
 			<List>{renderRoutes}</List>
 
-			<SuiBox pt={2} my={2} mx={2}>
-				<SidenavCard controller={controller} />
-			</SuiBox>
+			{/* <SuiBox pt={2} my={2} mx={2}>
+        <SidenavCard controller={controller} />
+      </SuiBox> */}
 		</SidenavRoot>
 	);
 }
@@ -1854,14 +1867,12 @@ SuiButton.defaultProps = {
 };
 
 const SuiAvatarRoot = styled(Avatar)(({ theme, ownerState }) => {
-	console.log({ avatarTheme: theme });
 	const { palette, functions, typography, boxShadows } = theme;
 	const { shadow, bgColor, size } = ownerState;
 
 	const { gradients, transparent } = palette;
 	const { pxToRem, linearGradient } = functions;
 	const { size: fontSize, fontWeightBold } = typography;
-	console.log({ transparent, bgColor });
 	// backgroundImage value
 	const backgroundValue =
 		bgColor === "transparent"
@@ -2156,8 +2167,7 @@ const SuiInputIconBoxRoot = styled("div")(({ theme, ownerState }) => {
 		color: dark.main,
 	};
 });
-
-const SuiInput = forwardRef(
+const SuiInputOriginal = forwardRef(
 	({ controller, size, icon, error, success, disabled, ...rest }, ref) => {
 		let template;
 		//const [controller] = useSoftUIController();
@@ -2233,6 +2243,32 @@ const SuiInput = forwardRef(
 );
 
 // Setting default values for the props of SuiInput
+SuiInputOriginal.defaultProps = {
+	size: "medium",
+	icon: {
+		component: false,
+		direction: "none",
+	},
+	error: false,
+	success: false,
+	disabled: false,
+};
+export const SuiInput = forwardRef(
+	({ inputRef, size, icon, error, success, disabled, ...rest }, ref) => {
+		let template;
+		//const [controller] = useSoftUIController();
+		template = (
+			<SuiInputRoot
+				{...rest}
+				ref={inputRef}
+				ownerState={{ size, error, success, disabled }}
+			/>
+		);
+		return template;
+	}
+);
+
+// Setting default values for the props of SuiInput
 SuiInput.defaultProps = {
 	size: "medium",
 	icon: {
@@ -2274,9 +2310,12 @@ const SuiEditorRoot = styled("div")(({ theme }) => {
 });
 
 function SuiEditor(props) {
+	const modules = {
+		toolbar: false, //[[], [], [], [], []],
+	};
 	return (
 		<SuiEditorRoot>
-			<ReactQuill theme="snow" {...props} />
+			<ReactQuill modules={modules} theme="snow" {...props} />
 		</SuiEditorRoot>
 	);
 }
@@ -2498,25 +2537,27 @@ const styles = (selectSize, selectError, selectSuccess) => {
 	};
 };
 
-const SuiSelect = forwardRef(({ size, error, success, ...rest }, ref) => {
-	const { light } = colors;
+export const SuiSelect = forwardRef(
+	({ size, error, success, ...rest }, ref) => {
+		const { light } = colors;
 
-	return (
-		<Select
-			{...rest}
-			ref={ref}
-			styles={styles(size, error, success)}
-			theme={(theme) => ({
-				...theme,
-				colors: {
-					...theme.colors,
-					primary25: light.main,
-					primary: light.main,
-				},
-			})}
-		/>
-	);
-});
+		return (
+			<Select
+				{...rest}
+				ref={ref}
+				styles={styles(size, error, success)}
+				theme={(theme) => ({
+					...theme,
+					colors: {
+						...theme.colors,
+						primary25: light.main,
+						primary: light.main,
+					},
+				})}
+			/>
+		);
+	}
+);
 
 // Setting default values for the props of SuiSelect
 SuiSelect.defaultProps = {
@@ -2526,7 +2567,6 @@ SuiSelect.defaultProps = {
 };
 
 function EventCard({ id, image, title, dateTime, description, action }) {
-	console.log({ image });
 	return (
 		<Card>
 			<SuiBox p={2}>
@@ -4046,6 +4086,170 @@ function PagesBodyCell({ rows, noBorder }) {
 PagesBodyCell.defaultProps = {
 	noBorder: false,
 };
+function PagesBodyCellAdd({ noBorder, onClick }) {
+	const { light } = colors;
+	const { borderWidth } = borders;
+
+	return (
+		<TableRow>
+			<SuiBox
+				component="td"
+				width="100%"
+				textAlign="left"
+				borderBottom={
+					noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`
+				}
+				p={1}
+				onClick={onClick}
+			>
+				<SuiTypography
+					display="block"
+					variant="button"
+					fontWeight="medium"
+					color="text"
+					sx={{ width: "max-content" }}
+				>
+					<Add />
+				</SuiTypography>
+			</SuiBox>
+		</TableRow>
+	);
+}
+// Setting default values for the props for PagesBodyCell
+PagesBodyCellAdd.defaultProps = {
+	noBorder: false,
+};
+
+function PagesBodyCellInput({ noBorder, onClick, onChange, ref }) {
+	const { light } = colors;
+	const { borderWidth } = borders;
+
+	return (
+		<TableRow>
+			<SuiBox
+				component="td"
+				width="100%"
+				textAlign="left"
+				borderBottom={
+					noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`
+				}
+				p={1}
+			>
+				<SuiTypography
+					display="block"
+					variant="button"
+					fontWeight="medium"
+					color="text"
+					sx={{ width: "max-content" }}
+				>
+					<SuiInput onChange={onChange} />
+					<Add onClick={onClick} />
+				</SuiTypography>
+			</SuiBox>
+		</TableRow>
+	);
+}
+// Setting default values for the props for PagesBodyCell
+PagesBodyCellInput.defaultProps = {
+	noBorder: false,
+};
+
+function PagesBodyCellAddInput({ onSubmit }) {
+	const [inputData, setInputData] = useState({
+		showInput: false,
+		textValue: "",
+	});
+	const textInput = useRef(null); // undefined; //React.createRef(); //
+	const onClickShowHide = (e) => {
+		e.preventDefault();
+		setInputData({ ...inputData, showInput: !inputData.showInput });
+	};
+
+	const onSave = (e) => {
+		const textValue = inputData.textValue; //e.target.value;
+		onSubmit(textValue);
+		onClickShowHide(e);
+		//onSubmit()
+		//e.preventDefault();
+		//setInputData({ ...inputData, showInput: !inputData.showInput });
+	};
+	const onTextChange = (e) => {
+		const textValue = e.target.value;
+		setInputData({ ...inputData, textValue });
+	};
+
+	return (
+		<Fragment>
+			{inputData.showInput ? (
+				<PagesBodyCellInput
+					onChange={onTextChange}
+					onClick={onSave}
+					ref={textInput}
+				/>
+			) : (
+				<PagesBodyCellAdd onClick={onClickShowHide} />
+			)}
+		</Fragment>
+	);
+}
+export function SuiTableAdd({ headers, rows, title, onSubmit }) {
+	const PageHeaders = (
+		<Fragment>
+			{headers.map((header, index) => {
+				return <PagesHeaderCell key={index}>{header}</PagesHeaderCell>;
+			})}
+		</Fragment>
+	);
+
+	const PageRows = (
+		<Fragment>
+			{rows.map((row, index) => {
+				return <PagesBodyCell key={index} rows={row} />;
+			})}
+		</Fragment>
+	);
+	return (
+		<Card>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+				pt={2}
+				px={2}
+			>
+				<SuiTypography variant="h6">{title}</SuiTypography>
+				<Tooltip
+					title="Data is based from sessions and is 100% accurate"
+					placement="left"
+				>
+					<SuiButton
+						variant="outlined"
+						color="white"
+						size="small"
+						circular
+						iconOnly
+					>
+						<Icon sx={{ fontWeight: "bold" }}>done</Icon>
+					</SuiButton>
+				</Tooltip>
+			</SuiBox>
+			<SuiBox py={1} px={2}>
+				<TableContainer sx={{ boxShadow: "none" }}>
+					<Table>
+						<SuiBox component="thead">
+							<TableRow>{PageHeaders}</TableRow>
+						</SuiBox>
+						<TableBody>
+							{PageRows}
+							<PagesBodyCellAddInput onSubmit={onSubmit} />
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</SuiBox>
+		</Card>
+	);
+}
+
 export function SuiTable({ headers, rows, title }) {
 	const PageHeaders = (
 		<Fragment>
@@ -4100,6 +4304,7 @@ export function SuiTable({ headers, rows, title }) {
 		</Card>
 	);
 }
+
 export function Pages() {
 	return (
 		<Card>
@@ -5130,6 +5335,70 @@ export const ConfigurationButton = ({ handleConfiguratorOpen }) => {
 	return <Fragment>{configsButton}</Fragment>;
 };
 
+export const NewProjectLayOut = ({ children }) => {
+	return (
+		<SuiBox mt={3} mb={4}>
+			<Grid container spacing={3} justifyContent="center">
+				<Grid item xs={12} lg={9}>
+					<Card sx={{ overflow: "visible" }}>
+						<SuiBox p={2} lineHeight={1}>
+							{children}
+						</SuiBox>
+					</Card>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+};
+
+export const TextAreaInput = ({
+	title,
+	description,
+	setEditorValue,
+	editorValue,
+}) => {
+	return (
+		<SuiBox
+			display="flex"
+			flexDirection="column"
+			justifyContent="flex-end"
+			height="100%"
+		>
+			<SuiBox
+				mb={1}
+				ml={0.5}
+				mt={3}
+				lineHeight={0}
+				display="inline-block"
+			>
+				<SuiTypography
+					component="label"
+					variant="caption"
+					fontWeight="bold"
+				>
+					{title || "Project Description"}
+				</SuiTypography>
+			</SuiBox>
+			<SuiBox
+				mb={1.5}
+				ml={0.5}
+				mt={0.5}
+				lineHeight={0}
+				display="inline-block"
+			>
+				<SuiTypography
+					component="label"
+					variant="caption"
+					fontWeight="regular"
+					color="text"
+				>
+					{description}
+				</SuiTypography>
+			</SuiBox>
+			<SuiEditor value={editorValue} onChange={setEditorValue} />
+		</SuiBox>
+	);
+};
 export function NewProject({ controller }) {
 	const [startDate, setStartDate] = useState(new Date());
 	const [endDate, setEndDate] = useState(new Date());
@@ -5438,7 +5707,1689 @@ export function NewProject({ controller }) {
 		</SuiBox>
 	);
 }
+function menuItem(theme) {
+	const { palette, borders, transitions } = theme;
 
+	const { secondary, light } = palette;
+	const { borderRadius } = borders;
+
+	return {
+		display: "flex",
+		alignItems: "center",
+		width: "100%",
+		color: secondary.main,
+		py: 1,
+		px: 2,
+		borderRadius: borderRadius.md,
+		transition: transitions.create("background-color", {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.standard,
+		}),
+
+		"&:not(:last-child)": {
+			mb: 1.25,
+		},
+
+		"&:hover": {
+			backgroundColor: light.main,
+		},
+	};
+}
+
+function menuImage(theme, ownerState) {
+	const { functions, palette, borders } = theme;
+	const { color } = ownerState;
+
+	const { linearGradient } = functions;
+	const { gradients } = palette;
+	const { borderRadius } = borders;
+
+	return {
+		display: "grid",
+		placeItems: "center",
+		backgroundImage: gradients[color]
+			? linearGradient(gradients[color].main, gradients[color].state)
+			: linearGradient(gradients.dark.main, gradients.dark.state),
+
+		"& img": {
+			width: "100%",
+			borderRadius: borderRadius.lg,
+		},
+	};
+}
+
+const NotificationItem = forwardRef(
+	({ color, image, title, date, ...rest }, ref) => (
+		<MenuItem {...rest} ref={ref} sx={(theme) => menuItem(theme)}>
+			<SuiBox
+				width="2.25rem"
+				height="2.25rem"
+				mt={0.25}
+				mr={2}
+				mb={0.25}
+				borderRadius="lg"
+				sx={(theme) => menuImage(theme, { color })}
+			>
+				{image}
+			</SuiBox>
+			<SuiBox>
+				<SuiTypography
+					variant="button"
+					textTransform="capitalize"
+					fontWeight="regular"
+				>
+					<strong>{title[0]}</strong> {title[1]}
+				</SuiTypography>
+				<SuiTypography
+					variant="caption"
+					color="secondary"
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						mt: 0.5,
+					}}
+				>
+					<SuiTypography variant="button" color="secondary">
+						<Icon
+							sx={{
+								lineHeight: 1.2,
+								mr: 0.5,
+							}}
+						>
+							watch_later
+						</Icon>
+					</SuiTypography>
+					{date}
+				</SuiTypography>
+			</SuiBox>
+		</MenuItem>
+	)
+);
+
+// Setting default values for the props of NotificationItem
+NotificationItem.defaultProps = {
+	color: "dark",
+};
+
+function navbar(theme, ownerState) {
+	const {
+		palette,
+		boxShadows,
+		functions,
+		transitions,
+		breakpoints,
+		borders,
+	} = theme;
+	const { transparentNavbar, absolute, light } = ownerState;
+
+	const { dark, white, text, transparent } = palette;
+	const { navbarBoxShadow } = boxShadows;
+	const { rgba, pxToRem } = functions;
+	const { borderRadius } = borders;
+
+	return {
+		boxShadow: transparentNavbar || absolute ? "none" : navbarBoxShadow,
+		backdropFilter:
+			transparentNavbar || absolute
+				? "none"
+				: `saturate(200%) blur(${pxToRem(30)})`,
+		backgroundColor:
+			transparentNavbar || absolute
+				? `${transparent.main} !important`
+				: rgba(white.main, 0.8),
+
+		color: () => {
+			let color;
+
+			if (light) {
+				color = white.main;
+			} else if (transparentNavbar) {
+				color = text.main;
+			} else {
+				color = dark.main;
+			}
+
+			return color;
+		},
+		top: absolute ? 0 : pxToRem(12),
+		minHeight: pxToRem(75),
+		display: "grid",
+		alignItems: "center",
+		borderRadius: borderRadius.xl,
+		paddingTop: pxToRem(8),
+		paddingBottom: pxToRem(8),
+		paddingRight: absolute ? pxToRem(8) : 0,
+		paddingLeft: absolute ? pxToRem(16) : 0,
+
+		"& > *": {
+			transition: transitions.create("all", {
+				easing: transitions.easing.easeInOut,
+				duration: transitions.duration.standard,
+			}),
+		},
+
+		"& .MuiToolbar-root": {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "center",
+
+			[breakpoints.up("sm")]: {
+				minHeight: "auto",
+				padding: `${pxToRem(4)} ${pxToRem(16)}`,
+			},
+		},
+	};
+}
+
+const navbarContainer = ({ breakpoints }) => ({
+	flexDirection: "column",
+	alignItems: "flex-start",
+	justifyContent: "space-between",
+	pt: 0.5,
+	pb: 0.5,
+
+	[breakpoints.up("md")]: {
+		flexDirection: "row",
+		alignItems: "center",
+		paddingTop: "0",
+		paddingBottom: "0",
+	},
+});
+
+const navbarRow = ({ breakpoints }, { isMini }) => ({
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "space-between",
+	width: "100%",
+
+	[breakpoints.up("md")]: {
+		justifyContent: isMini ? "space-between" : "stretch",
+		width: isMini ? "100%" : "max-content",
+	},
+
+	[breakpoints.up("xl")]: {
+		justifyContent: "stretch !important",
+		width: "max-content !important",
+	},
+});
+
+const navbarIconButton = ({ typography: { size }, breakpoints }) => ({
+	px: 0.75,
+
+	"& .material-icons, .material-icons-round": {
+		fontSize: `${size.md} !important`,
+	},
+
+	"& .MuiTypography-root": {
+		display: "none",
+
+		[breakpoints.up("sm")]: {
+			display: "inline-block",
+			lineHeight: 1.2,
+			ml: 0.5,
+		},
+	},
+});
+
+const navbarDesktopMenu = ({ breakpoints }) => ({
+	display: "none !important",
+	cursor: "pointer",
+
+	[breakpoints.up("xl")]: {
+		display: "inline-block !important",
+	},
+});
+
+const navbarMobileMenu = ({ breakpoints }) => ({
+	display: "inline-block",
+	lineHeight: 0,
+
+	[breakpoints.up("xl")]: {
+		display: "none",
+	},
+});
+export function DashboardNavbarOriginal({
+	controller,
+	absolute,
+	light,
+	isMini,
+}) {
+	const [navbarType, setNavbarType] = useState();
+	//const [controller, dispatch] = useSoftUIController();
+	const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } =
+		controller;
+	const [openMenu, setOpenMenu] = useState(false);
+	const route = useLocation().pathname.split("/").slice(1);
+
+	useEffect(() => {
+		// Setting the navbar type
+		if (fixedNavbar) {
+			setNavbarType("sticky");
+		} else {
+			setNavbarType("static");
+		}
+
+		// A function that sets the transparent state of the navbar.
+		function handleTransparentNavbar() {
+			//setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
+		}
+
+		/** 
+     The event listener that's calling the handleTransparentNavbar function when 
+     scrolling the window.
+    */
+		window.addEventListener("scroll", handleTransparentNavbar);
+
+		// Call the handleTransparentNavbar function to set the state with the initial value.
+		handleTransparentNavbar();
+
+		// Remove event listener on cleanup
+		return () =>
+			window.removeEventListener("scroll", handleTransparentNavbar);
+	}, [fixedNavbar]);
+
+	const handleMiniSidenav = () => console.log("Nav"); //setMiniSidenav(dispatch, !miniSidenav);
+	const handleConfiguratorOpen = () => console.log("Nav"); //setOpenConfigurator(dispatch, !openConfigurator);
+	const handleOpenMenu = (event) => console.log("Nav"); //setOpenMenu(event.currentTarget);
+	const handleCloseMenu = () => console.log("Nav"); //setOpenMenu(false);
+
+	// Render the notifications menu
+	const renderMenu = () => (
+		<Menu
+			anchorEl={openMenu}
+			anchorReference={null}
+			anchorOrigin={{
+				vertical: "bottom",
+				horizontal: "left",
+			}}
+			open={Boolean(openMenu)}
+			onClose={handleCloseMenu}
+			sx={{ mt: 2 }}
+		>
+			<NotificationItem
+				image={<img src={"team2"} alt="person" />}
+				title={["New message", "from Laur"]}
+				date="13 minutes ago"
+				onClick={handleCloseMenu}
+			/>
+		</Menu>
+	);
+
+	return (
+		<AppBar
+			position={absolute ? "absolute" : navbarType}
+			color="inherit"
+			sx={(theme) =>
+				navbar(theme, { transparentNavbar, absolute, light })
+			}
+		>
+			<Toolbar sx={(theme) => navbarContainer(theme)}>
+				<SuiBox
+					color="inherit"
+					mb={{ xs: 1, md: 0 }}
+					sx={(theme) => navbarRow(theme, { isMini })}
+				>
+					{/* <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} /> */}
+					<Icon
+						fontSize="medium"
+						sx={navbarDesktopMenu}
+						onClick={handleMiniSidenav}
+					>
+						{miniSidenav ? "menu_open" : "menu"}
+					</Icon>
+				</SuiBox>
+				{isMini ? null : (
+					<SuiBox sx={(theme) => navbarRow(theme, { isMini })}>
+						<SuiBox pr={1}>
+							<SuiInput
+								placeholder="Type here..."
+								icon={{
+									component: "search",
+									direction: "left",
+								}}
+							/>
+						</SuiBox>
+						<SuiBox color={light ? "white" : "inherit"}>
+							<Link to="/authentication/sign-in/basic">
+								<IconButton sx={navbarIconButton} size="small">
+									<Icon
+										sx={({ palette: { dark, white } }) => ({
+											color: light
+												? white.main
+												: dark.main,
+										})}
+									>
+										account_circle
+									</Icon>
+									<SuiTypography
+										variant="button"
+										fontWeight="medium"
+										color={light ? "white" : "dark"}
+									>
+										Sign in
+									</SuiTypography>
+								</IconButton>
+							</Link>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarMobileMenu}
+								onClick={handleMiniSidenav}
+							>
+								<Icon
+									className={
+										light ? "text-white" : "text-dark"
+									}
+								>
+									{miniSidenav ? "menu_open" : "menu"}
+								</Icon>
+							</IconButton>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarIconButton}
+								onClick={handleConfiguratorOpen}
+							>
+								<Icon>settings</Icon>
+							</IconButton>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarIconButton}
+								aria-controls="notification-menu"
+								aria-haspopup="true"
+								variant="contained"
+								onClick={handleOpenMenu}
+							>
+								<Icon
+									className={
+										light ? "text-white" : "text-dark"
+									}
+								>
+									notifications
+								</Icon>
+							</IconButton>
+							{renderMenu()}
+						</SuiBox>
+					</SuiBox>
+				)}
+			</Toolbar>
+		</AppBar>
+	);
+}
+
+export function DashboardNavbar({
+	controller,
+	absolute,
+	light,
+	isMini,
+	onAccountClick,
+	setController,
+}) {
+	const [navbarType, setNavbarType] = useState();
+	//const [controller, dispatch] = useSoftUIController();
+	const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator } =
+		controller;
+	const [openMenu, setOpenMenu] = useState(false);
+	const route = useLocation().pathname.split("/").slice(1);
+
+	useEffect(() => {
+		// Setting the navbar type
+		if (fixedNavbar) {
+			setNavbarType("sticky");
+		} else {
+			setNavbarType("static");
+		}
+
+		// A function that sets the transparent state of the navbar.
+		function handleTransparentNavbar() {
+			//setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
+		}
+
+		/** 
+     The event listener that's calling the handleTransparentNavbar function when 
+     scrolling the window.
+    */
+		window.addEventListener("scroll", handleTransparentNavbar);
+
+		// Call the handleTransparentNavbar function to set the state with the initial value.
+		handleTransparentNavbar();
+
+		// Remove event listener on cleanup
+		return () =>
+			window.removeEventListener("scroll", handleTransparentNavbar);
+	}, [fixedNavbar]);
+
+	const handleMiniSidenav = () =>
+		setController({ ...controller, miniSidenav: !miniSidenav }); //console.log("Nav"); //setMiniSidenav(dispatch, !miniSidenav);
+	const handleConfiguratorOpen = () => console.log("Nav"); //setOpenConfigurator(dispatch, !openConfigurator);
+	const handleOpenMenu = (event) => console.log("Nav"); //setOpenMenu(event.currentTarget);
+	const handleCloseMenu = () => console.log("Nav"); //setOpenMenu(false);
+
+	// Render the notifications menu
+	const renderMenu = () => (
+		<Menu
+			anchorEl={openMenu}
+			anchorReference={null}
+			anchorOrigin={{
+				vertical: "bottom",
+				horizontal: "left",
+			}}
+			open={Boolean(openMenu)}
+			onClose={handleCloseMenu}
+			sx={{ mt: 2 }}
+		>
+			<NotificationItem
+				image={<img src={"team2"} alt="person" />}
+				title={["New message", "from Laur"]}
+				date="13 minutes ago"
+				onClick={handleCloseMenu}
+			/>
+		</Menu>
+	);
+
+	return (
+		<AppBar
+			position={absolute ? "absolute" : navbarType}
+			color="inherit"
+			sx={(theme) =>
+				navbar(theme, { transparentNavbar, absolute, light })
+			}
+		>
+			<Toolbar sx={(theme) => navbarContainer(theme)}>
+				<SuiBox
+					color="inherit"
+					mb={{ xs: 1, md: 0 }}
+					sx={(theme) => navbarRow(theme, { isMini })}
+				>
+					{/* <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} /> */}
+					<MenuIcon
+						fontSize="medium"
+						sx={navbarDesktopMenu}
+						onClick={handleMiniSidenav}
+					>
+						{miniSidenav ? "menu_open" : "menu"}
+					</MenuIcon>
+				</SuiBox>
+				{isMini ? null : (
+					<SuiBox sx={(theme) => navbarRow(theme, { isMini })}>
+						<SuiBox pr={1}>
+							{/* <SuiInput
+                placeholder="Type here..."
+                icon={{ component: "search", direction: "left" }}
+              /> */}
+						</SuiBox>
+						<SuiBox color={light ? "white" : "inherit"}>
+							<Link to="/authentication/sign-in/basic">
+								<IconButton
+									sx={navbarIconButton}
+									size="small"
+									onClick={onAccountClick}
+								>
+									<AccountBoxIcon
+										sx={({ palette: { dark, white } }) => ({
+											color: light
+												? white.main
+												: dark.main,
+										})}
+									>
+										account_circle
+									</AccountBoxIcon>
+									<SuiTypography
+										variant="button"
+										fontWeight="medium"
+										color={light ? "white" : "dark"}
+									></SuiTypography>
+								</IconButton>
+							</Link>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarMobileMenu}
+								onClick={handleMiniSidenav}
+							>
+								<NotificationsIcon
+									className={
+										light ? "text-white" : "text-dark"
+									}
+								>
+									{miniSidenav ? "menu_open" : "menu"}
+								</NotificationsIcon>
+							</IconButton>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarIconButton}
+								onClick={handleConfiguratorOpen}
+							>
+								{/* <SettingsIcon>settings</SettingsIcon> */}
+							</IconButton>
+							<IconButton
+								size="small"
+								color="inherit"
+								sx={navbarIconButton}
+								aria-controls="notification-menu"
+								aria-haspopup="true"
+								variant="contained"
+								onClick={handleOpenMenu}
+							>
+								{/* <NotificationsIcon
+                  className={light ? "text-white" : "text-dark"}
+                >
+                  notifications
+                </NotificationsIcon> */}
+							</IconButton>
+							{renderMenu()}
+						</SuiBox>
+					</SuiBox>
+				)}
+			</Toolbar>
+		</AppBar>
+	);
+}
+
+// Setting default values for the props of DashboardNavbar
+DashboardNavbar.defaultProps = {
+	absolute: false,
+	light: false,
+	isMini: false,
+};
+
+export function FormField({ label, ...rest }) {
+	return (
+		<>
+			<SuiBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
+				<SuiTypography
+					component="label"
+					variant="caption"
+					fontWeight="bold"
+					textTransform="capitalize"
+				>
+					{label}
+				</SuiTypography>
+			</SuiBox>
+			<SuiInput {...rest} />
+		</>
+	);
+}
+
+function About() {
+	return (
+		<SuiBox>
+			<SuiBox width="80%" textAlign="center" mx="auto" mb={4}>
+				<SuiBox mb={1}>
+					<SuiTypography variant="h5" fontWeight="regular">
+						Let&apos;s start with the basic information
+					</SuiTypography>
+				</SuiBox>
+				<SuiTypography
+					variant="body2"
+					fontWeight="regular"
+					color="text"
+				>
+					Let us know your name and email address. Use an address you
+					don&apos;t mind other users contacting you at
+				</SuiTypography>
+			</SuiBox>
+			<SuiBox mt={2}>
+				<Grid container spacing={3}>
+					<Grid item xs={12} sm={4} container justifyContent="center">
+						<SuiBox
+							position="relative"
+							height="max-content"
+							mx="auto"
+						>
+							<SuiAvatar
+								src={"team2"}
+								alt="profile picture"
+								size="xxl"
+								variant="rounded"
+							/>
+							<SuiBox
+								alt="spotify logo"
+								position="absolute"
+								right={0}
+								bottom={0}
+								mr={-1}
+								mb={-1}
+							>
+								<SuiButton
+									variant="gradient"
+									color="light"
+									size="small"
+									iconOnly
+								>
+									<Icon>edit</Icon>
+								</SuiButton>
+							</SuiBox>
+						</SuiBox>
+					</Grid>
+					<Grid item xs={12} sm={8}>
+						<SuiBox mb={2}>
+							<FormField
+								type="text"
+								label="first name"
+								placeholder="Eg. Michael"
+							/>
+						</SuiBox>
+						<SuiBox mb={2}>
+							<FormField
+								type="text"
+								label="last name"
+								placeholder="Eg. Tomson"
+							/>
+						</SuiBox>
+						<SuiBox>
+							<FormField
+								type="text"
+								label="email address"
+								placeholder="Eg. soft@dashboard.com"
+							/>
+						</SuiBox>
+					</Grid>
+				</Grid>
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+function Account() {
+	const [design, setDesign] = useState(false);
+	const [code, setCode] = useState(false);
+	const [develop, setDevelop] = useState(false);
+
+	const handleSetDesign = () => setDesign(!design);
+	const handleSetCode = () => setCode(!code);
+	const handleSetDevelop = () => setDevelop(!develop);
+
+	const customButtonStyles = ({
+		functions: { pxToRem, rgba },
+		borders: { borderWidth },
+		palette: { transparent, dark, secondary },
+	}) => ({
+		width: pxToRem(150),
+		height: pxToRem(120),
+		borderWidth: borderWidth[2],
+		mb: 1,
+		ml: 0.5,
+
+		"&.MuiButton-contained, &.MuiButton-contained:hover": {
+			boxShadow: "none",
+			border: `${borderWidth[2]} solid ${transparent.main}`,
+		},
+
+		"&:hover": {
+			backgroundColor: `${transparent.main} !important`,
+			border: `${borderWidth[2]} solid ${secondary.main} !important`,
+
+			"& svg g": {
+				fill: rgba(dark.main, 0.75),
+			},
+		},
+	});
+
+	return (
+		<SuiBox>
+			<SuiBox width="80%" textAlign="center" mx="auto" mb={4}>
+				<SuiBox mb={1}>
+					<SuiTypography variant="h5" fontWeight="regular">
+						What are you doing? (checkboxes)
+					</SuiTypography>
+				</SuiBox>
+				<SuiTypography
+					variant="body2"
+					fontWeight="regular"
+					color="text"
+				>
+					Give us more details about you. What do you enjoy doing in
+					your spare time?
+				</SuiTypography>
+			</SuiBox>
+			<SuiBox mt={2}>
+				<Grid container spacing={3} justifyContent="center">
+					<Grid item xs={12} sm={3}>
+						<SuiBox textAlign="center">
+							<SuiButton
+								color="secondary"
+								variant={design ? "contained" : "outlined"}
+								onClick={handleSetDesign}
+								sx={customButtonStyles}
+							>
+								<SpaceShip
+									size="24px"
+									color={design ? "white" : "dark"}
+								/>
+							</SuiButton>
+							<SuiTypography variant="h6">Design</SuiTypography>
+						</SuiBox>
+					</Grid>
+					<Grid item xs={12} sm={3}>
+						<SuiBox textAlign="center">
+							<SuiButton
+								color="secondary"
+								variant={code ? "contained" : "outlined"}
+								onClick={handleSetCode}
+								sx={customButtonStyles}
+							>
+								<SpaceShip
+									size="24px"
+									color={code ? "white" : "dark"}
+								/>
+							</SuiButton>
+							<SuiTypography variant="h6">Code</SuiTypography>
+						</SuiBox>
+					</Grid>
+					<Grid item xs={12} sm={3}>
+						<SuiBox textAlign="center">
+							<SuiButton
+								color="secondary"
+								variant={develop ? "contained" : "outlined"}
+								onClick={handleSetDevelop}
+								sx={customButtonStyles}
+							>
+								<SpaceShip
+									size="24px"
+									color={develop ? "white" : "dark"}
+								/>
+							</SuiButton>
+							<SuiTypography variant="h6">Develop</SuiTypography>
+						</SuiBox>
+					</Grid>
+				</Grid>
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+export function Address() {
+	return (
+		<SuiBox>
+			<SuiBox width="80%" textAlign="center" mx="auto" mb={4}>
+				<SuiBox mb={1}>
+					<SuiTypography variant="h5" fontWeight="regular">
+						Are you living in a nice area?
+					</SuiTypography>
+				</SuiBox>
+				<SuiTypography
+					variant="body2"
+					fontWeight="regular"
+					color="text"
+				>
+					One thing I love about the later sunsets is the chance to go
+					for a walk through the neighborhood woods before dinner
+				</SuiTypography>
+			</SuiBox>
+			<SuiBox mt={2}>
+				<Grid container spacing={3}>
+					<Grid item xs={12} md={8}>
+						<FormField
+							type="text"
+							label="street name"
+							placeholder="Eg. Soft"
+						/>
+					</Grid>
+					<Grid item xs={12} md={4}>
+						<FormField
+							type="number"
+							label="street number"
+							placeholder="Eg. 221"
+						/>
+					</Grid>
+					<Grid item xs={12} md={7}>
+						<FormField
+							type="text"
+							label="city"
+							placeholder="Eg. Tokyo"
+						/>
+					</Grid>
+					<Grid item xs={12} md={5}>
+						<FormField
+							type="text"
+							label="country"
+							placeholder="Eg. Argentina"
+						/>
+					</Grid>
+				</Grid>
+			</SuiBox>
+		</SuiBox>
+	);
+}
+
+export function WizardOld() {
+	const [activeStep, setActiveStep] = useState(0);
+	const steps = getSteps();
+	const isLastStep = activeStep === steps.length - 1;
+
+	const handleNext = () => setActiveStep(activeStep + 1);
+	const handleBack = () => setActiveStep(activeStep - 1);
+
+	return (
+		<SuiBox pt={3} pb={8}>
+			<Grid container justifyContent="center">
+				<Grid item xs={12} lg={8}>
+					<SuiBox mt={6} mb={1} textAlign="center">
+						<SuiBox mb={1}>
+							<SuiTypography variant="h3" fontWeight="bold">
+								Build Your Profile
+							</SuiTypography>
+						</SuiBox>
+						<SuiTypography
+							variant="h5"
+							fontWeight="regular"
+							color="secondary"
+						>
+							This information will let us know more about you.
+						</SuiTypography>
+					</SuiBox>
+
+					<Stepper activeStep={activeStep} alternativeLabel>
+						{steps.map((label) => (
+							<Step key={label}>
+								<StepLabel>{label}</StepLabel>
+							</Step>
+						))}
+					</Stepper>
+					<Card>
+						<SuiBox p={2}>
+							<SuiBox>
+								{getStepContent(activeStep)}
+								<SuiBox
+									mt={3}
+									width="100%"
+									display="flex"
+									justifyContent="space-between"
+								>
+									{activeStep === 0 ? (
+										<SuiBox />
+									) : (
+										<SuiButton
+											variant="gradient"
+											color="light"
+											onClick={handleBack}
+										>
+											back
+										</SuiButton>
+									)}
+									<SuiButton
+										variant="gradient"
+										color="dark"
+										onClick={
+											!isLastStep ? handleNext : undefined
+										}
+									>
+										{isLastStep ? "send" : "next"}
+									</SuiButton>
+								</SuiBox>
+							</SuiBox>
+						</SuiBox>
+					</Card>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+}
+function getSteps() {
+	return ["About", "Account", "Address"];
+}
+
+function getStepContent(stepIndex) {
+	switch (stepIndex) {
+		case 0:
+			return <About />;
+		case 1:
+			return <Account />;
+		case 2:
+			return <Address />;
+		default:
+			return null;
+	}
+}
+
+export function Wizard({ steps, getStepContent, title, description }) {
+	const [activeStep, setActiveStep] = useState(0);
+	//const steps = getSteps();
+	const isLastStep = activeStep === steps.length - 1;
+
+	const handleNext = () => setActiveStep(activeStep + 1);
+	const handleBack = () => setActiveStep(activeStep - 1);
+
+	return (
+		<Grid container justifyContent="center">
+			<Grid item xs={12} lg={8}>
+				<SuiBox mt={6} mb={1} textAlign="center">
+					<SuiBox mb={1}>
+						<SuiTypography variant="h3" fontWeight="bold">
+							{title}
+						</SuiTypography>
+					</SuiBox>
+					<SuiTypography
+						variant="h5"
+						fontWeight="regular"
+						color="secondary"
+					>
+						{description}
+					</SuiTypography>
+				</SuiBox>
+
+				<Card>
+					<SuiBox p={2}>
+						<SuiBox>
+							{getStepContent(activeStep)}
+							<SuiBox
+								mt={3}
+								width="100%"
+								display="flex"
+								justifyContent="space-between"
+							>
+								{activeStep === 0 ? (
+									<SuiBox />
+								) : (
+									<SuiButton
+										variant="gradient"
+										color="light"
+										onClick={handleBack}
+									>
+										back
+									</SuiButton>
+								)}
+								<SuiButton
+									variant="gradient"
+									color="dark"
+									onClick={
+										!isLastStep ? handleNext : undefined
+									}
+								>
+									{isLastStep ? "send" : "next"}
+								</SuiButton>
+							</SuiBox>
+						</SuiBox>
+					</SuiBox>
+				</Card>
+				<Stepper activeStep={activeStep} alternativeLabel>
+					{steps.map((label) => (
+						<Step key={label}>
+							<StepLabel>{label}</StepLabel>
+						</Step>
+					))}
+				</Stepper>
+			</Grid>
+		</Grid>
+	);
+}
+const SuiAlertRoot = styled(Box)(({ theme, ownerState }) => {
+	const { palette, typography, borders, functions } = theme;
+	const { color } = ownerState;
+
+	const { white, alertColors } = palette;
+	const { fontSizeRegular, fontWeightMedium } = typography;
+	const { borderWidth, borderRadius } = borders;
+	const { pxToRem, linearGradient } = functions;
+
+	// backgroundImage value
+	const backgroundImageValue = alertColors[color]
+		? linearGradient(alertColors[color].main, alertColors[color].state)
+		: linearGradient(alertColors.info.main, alertColors.info.state);
+
+	// border value
+	const borderValue = alertColors[color]
+		? `${borderWidth[1]} solid ${alertColors[color].border}`
+		: `${borderWidth[1]} solid ${alertColors.info.border}`;
+
+	return {
+		display: "flex",
+		justifyContent: "space-between",
+		alignItems: "center",
+		minHeight: pxToRem(60),
+		backgroundImage: backgroundImageValue,
+		color: white.main,
+		position: "relative",
+		padding: pxToRem(16),
+		marginBottom: pxToRem(16),
+		border: borderValue,
+		borderRadius: borderRadius.md,
+		fontSize: fontSizeRegular,
+		fontWeight: fontWeightMedium,
+	};
+});
+
+const SuiAlertCloseIcon = styled("span")(({ theme }) => {
+	const { palette, typography, functions, transitions } = theme;
+
+	const { white } = palette;
+	const { size, fontWeightMedium } = typography;
+	const { pxToRem } = functions;
+
+	return {
+		color: white.main,
+		fontSize: size.xl,
+		padding: `${pxToRem(9)} ${pxToRem(6)} ${pxToRem(8)}`,
+		marginLeft: pxToRem(40),
+		fontWeight: fontWeightMedium,
+		opacity: 0.5,
+		cursor: "pointer",
+		lineHeight: 0,
+		transition: transitions.create("opacity", {
+			easing: transitions.easing.easeInOut,
+			duration: transitions.duration.shorter,
+		}),
+
+		"&:hover": {
+			opacity: 1,
+		},
+	};
+});
+export function SuiAlert({ color, dismissible, children, ...rest }) {
+	const [alertStatus, setAlertStatus] = useState("mount");
+
+	const handleAlertStatus = () => setAlertStatus("fadeOut");
+
+	// The base template for the alert
+	const alertTemplate = (mount = true) => (
+		<Fade in={mount} timeout={300}>
+			<SuiAlertRoot ownerState={{ color }} {...rest}>
+				<SuiBox display="flex" alignItems="center" color="white">
+					{children}
+				</SuiBox>
+				{dismissible ? (
+					<SuiAlertCloseIcon
+						onClick={mount ? handleAlertStatus : null}
+					>
+						&times;
+					</SuiAlertCloseIcon>
+				) : null}
+			</SuiAlertRoot>
+		</Fade>
+	);
+
+	switch (true) {
+		case alertStatus === "mount":
+			return alertTemplate();
+		case alertStatus === "fadeOut":
+			setTimeout(() => setAlertStatus("unmount"), 400);
+			return alertTemplate(false);
+		default:
+			alertTemplate();
+			break;
+	}
+
+	return null;
+}
+
+// Setting default values for the props of SuiAlert
+SuiAlert.defaultProps = {
+	color: "info",
+	dismissible: false,
+};
+
+const SuiSnackbarIconRoot = styled(Icon)(({ theme, ownerState }) => {
+	const { palette, functions, typography } = theme;
+	const { color, bgWhite } = ownerState;
+
+	const { white, transparent, gradients } = palette;
+	const { pxToRem, linearGradient } = functions;
+	const { size } = typography;
+
+	// backgroundImage value
+	let backgroundImageValue;
+
+	if (bgWhite) {
+		backgroundImageValue = gradients[color]
+			? linearGradient(gradients[color].main, gradients[color].state)
+			: linearGradient(gradients.info.main, gradients.info.state);
+	} else if (color === "light") {
+		backgroundImageValue = linearGradient(
+			gradients.dark.main,
+			gradients.dark.state
+		);
+	}
+
+	return {
+		backgroundImage: backgroundImageValue,
+		WebkitTextFillColor:
+			bgWhite || color === "light" ? transparent.main : white.main,
+		WebkitBackgroundClip: "text",
+		marginRight: pxToRem(8),
+		fontSize: size.lg,
+		transform: `translateY(${pxToRem(-2)})`,
+	};
+});
+export function SuiSnackbar({
+	color,
+	icon,
+	title,
+	dateTime,
+	content,
+	close,
+	bgWhite,
+	...rest
+}) {
+	const { size } = typography;
+	let titleColor;
+	let dateTimeColor;
+	let dividerColor;
+
+	if (bgWhite) {
+		titleColor = color;
+		dateTimeColor = "dark";
+		dividerColor = false;
+	} else if (color === "light") {
+		titleColor = "dark";
+		dateTimeColor = "text";
+		dividerColor = false;
+	} else {
+		titleColor = "white";
+		dateTimeColor = "white";
+		dividerColor = true;
+	}
+
+	return (
+		<Snackbar
+			TransitionComponent={Fade}
+			autoHideDuration={5000}
+			anchorOrigin={{
+				vertical: "top",
+				horizontal: "right",
+			}}
+			{...rest}
+			action={
+				<IconButton
+					size="small"
+					aria-label="close"
+					color="inherit"
+					onClick={close}
+				>
+					<Icon fontSize="small">close</Icon>
+				</IconButton>
+			}
+		>
+			<SuiBox
+				variant={bgWhite ? "contained" : "gradient"}
+				bgColor={bgWhite ? "white" : color}
+				minWidth="21.875rem"
+				maxWidth="100%"
+				shadow="md"
+				borderRadius="md"
+				p={1}
+			>
+				<SuiBox
+					display="flex"
+					justifyContent="space-between"
+					alignItems="center"
+					color="dark"
+					p={1.5}
+				>
+					<SuiBox display="flex" alignItems="center" lineHeight={0}>
+						<SuiSnackbarIconRoot
+							fontSize="small"
+							ownerState={{ color, bgWhite }}
+						>
+							{icon}
+						</SuiSnackbarIconRoot>
+						<SuiTypography
+							variant="button"
+							fontWeight="medium"
+							color={titleColor}
+							textGradient={bgWhite}
+						>
+							{title}
+						</SuiTypography>
+					</SuiBox>
+					<SuiBox display="flex" alignItems="center" lineHeight={0}>
+						<SuiTypography variant="caption" color={dateTimeColor}>
+							{dateTime}
+						</SuiTypography>
+						<Icon
+							sx={{
+								color: ({ palette: { dark, white } }) =>
+									bgWhite || color === "light"
+										? dark.main
+										: white.main,
+								fontWeight: ({
+									typography: { fontWeightBold },
+								}) => fontWeightBold,
+								cursor: "pointer",
+								marginLeft: 2,
+								transform: "translateY(-1px)",
+							}}
+							onClick={close}
+						>
+							close
+						</Icon>
+					</SuiBox>
+				</SuiBox>
+				<Divider sx={{ margin: 0 }} light={dividerColor} />
+				<SuiBox
+					p={1.5}
+					color={bgWhite || color === "light" ? "text" : "white"}
+					fontSize={size.sm}
+				>
+					{content}
+				</SuiBox>
+			</SuiBox>
+		</Snackbar>
+	);
+}
+
+// Setting default values for the props of SuiSnackbar
+SuiSnackbar.defaultProps = {
+	bgWhite: false,
+	color: "info",
+};
+export function NotificationsOld() {
+	const [successSB, setSuccessSB] = useState(false);
+	const [infoSB, setInfoSB] = useState(false);
+	const [warningSB, setWarningSB] = useState(false);
+	const [errorSB, setErrorSB] = useState(false);
+
+	const openSuccessSB = () => setSuccessSB(true);
+	const closeSuccessSB = () => setSuccessSB(false);
+	const openInfoSB = () => setInfoSB(true);
+	const closeInfoSB = () => setInfoSB(false);
+	const openWarningSB = () => setWarningSB(true);
+	const closeWarningSB = () => setWarningSB(false);
+	const openErrorSB = () => setErrorSB(true);
+	const closeErrorSB = () => setErrorSB(false);
+
+	const alertContent = (name) => (
+		<SuiTypography variant="body2" color="white">
+			A simple {name} alert with{" "}
+			<SuiTypography
+				component="a"
+				href="#"
+				variant="body2"
+				fontWeight="medium"
+				color="white"
+			>
+				an example link
+			</SuiTypography>
+			. Give it a click if you like.
+		</SuiTypography>
+	);
+
+	const renderSuccessSB = (
+		<SuiSnackbar
+			color="success"
+			icon="check"
+			title="Soft UI Dashboard"
+			content="Hello, world! This is a notification message"
+			dateTime="11 mins ago"
+			open={successSB}
+			onClose={closeSuccessSB}
+			close={closeSuccessSB}
+			bgWhite
+		/>
+	);
+
+	const renderInfoSB = (
+		<SuiSnackbar
+			icon="notifications"
+			title="Soft UI Dashboard"
+			content="Hello, world! This is a notification message"
+			dateTime="11 mins ago"
+			open={infoSB}
+			onClose={closeInfoSB}
+			close={closeInfoSB}
+		/>
+	);
+
+	const renderWarningSB = (
+		<SuiSnackbar
+			color="warning"
+			icon="star"
+			title="Soft UI Dashboard"
+			content="Hello, world! This is a notification message"
+			dateTime="11 mins ago"
+			open={warningSB}
+			onClose={closeWarningSB}
+			close={closeWarningSB}
+			bgWhite
+		/>
+	);
+
+	const renderErrorSB = (
+		<SuiSnackbar
+			color="error"
+			icon="warning"
+			title="Soft UI Dashboard"
+			content="Hello, world! This is a notification message"
+			dateTime="11 mins ago"
+			open={errorSB}
+			onClose={closeErrorSB}
+			close={closeErrorSB}
+			bgWhite
+		/>
+	);
+
+	return (
+		<SuiBox mt={6} mb={3}>
+			<Grid container spacing={3} justifyContent="center">
+				<Grid item xs={12} lg={8}>
+					<Card>
+						<SuiBox p={2}>
+							<SuiTypography variant="h5">Alerts</SuiTypography>
+						</SuiBox>
+						<SuiBox pt={2} px={2}>
+							<SuiAlert color="primary" dismissible>
+								{alertContent("primary")}
+							</SuiAlert>
+							<SuiAlert color="secondary" dismissible>
+								{alertContent("secondary")}
+							</SuiAlert>
+							<SuiAlert color="success" dismissible>
+								{alertContent("success")}
+							</SuiAlert>
+							<SuiAlert color="error" dismissible>
+								{alertContent("error")}
+							</SuiAlert>
+							<SuiAlert color="warning" dismissible>
+								{alertContent("warning")}
+							</SuiAlert>
+							<SuiAlert color="info" dismissible>
+								{alertContent("info")}
+							</SuiAlert>
+							<SuiAlert color="light" dismissible>
+								{alertContent("light")}
+							</SuiAlert>
+							<SuiAlert color="dark" dismissible>
+								{alertContent("dark")}
+							</SuiAlert>
+						</SuiBox>
+					</Card>
+				</Grid>
+
+				<Grid item xs={12} lg={8}>
+					<Card>
+						<SuiBox p={2} lineHeight={0}>
+							<SuiTypography variant="h5">
+								Notifications
+							</SuiTypography>
+							<SuiTypography
+								variant="button"
+								color="text"
+								fontWeight="regular"
+							>
+								Notifications on this page use Toasts from
+								Bootstrap. Read more details here.
+							</SuiTypography>
+						</SuiBox>
+						<SuiBox p={2}>
+							<Grid container spacing={3}>
+								<Grid item xs={12} sm={6} lg={3}>
+									<SuiButton
+										variant="gradient"
+										color="success"
+										onClick={openSuccessSB}
+										fullWidth
+									>
+										success notification
+									</SuiButton>
+									{renderSuccessSB}
+								</Grid>
+								<Grid item xs={12} sm={6} lg={3}>
+									<SuiButton
+										variant="gradient"
+										color="info"
+										onClick={openInfoSB}
+										fullWidth
+									>
+										info notification
+									</SuiButton>
+									{renderInfoSB}
+								</Grid>
+								<Grid item xs={12} sm={6} lg={3}>
+									<SuiButton
+										variant="gradient"
+										color="warning"
+										onClick={openWarningSB}
+										fullWidth
+									>
+										warning notification
+									</SuiButton>
+									{renderWarningSB}
+								</Grid>
+								<Grid item xs={12} sm={6} lg={3}>
+									<SuiButton
+										variant="gradient"
+										color="error"
+										onClick={openErrorSB}
+										fullWidth
+									>
+										error notification
+									</SuiButton>
+									{renderErrorSB}
+								</Grid>
+							</Grid>
+						</SuiBox>
+					</Card>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+}
+export function Notifications() {
+	const [successSB, setSuccessSB] = useState(false);
+	const [infoSB, setInfoSB] = useState(false);
+	const [warningSB, setWarningSB] = useState(false);
+	const [errorSB, setErrorSB] = useState(true);
+
+	const openSuccessSB = () => setSuccessSB(true);
+	const closeSuccessSB = () => setSuccessSB(false);
+	const openInfoSB = () => setInfoSB(true);
+	const closeInfoSB = () => setInfoSB(false);
+	const openWarningSB = () => setWarningSB(true);
+	const closeWarningSB = () => setWarningSB(false);
+	const openErrorSB = () => setErrorSB(true);
+	const closeErrorSB = () => setErrorSB(false);
+
+	const renderErrorSB = (
+		<SuiSnackbar
+			color="error"
+			icon="warning"
+			title="Soft UI Dashboard"
+			content="Hello, world! This is a notification message"
+			dateTime="11 mins ago"
+			position="top"
+			open={errorSB}
+			onClose={closeErrorSB}
+			close={closeErrorSB}
+			bgWhite
+		/>
+	);
+
+	return <Fragment>{renderErrorSB}</Fragment>;
+}
+
+// export function WizardBoxWrap({ children, title, description }) {
+//   return (
+//     <SuiBox mt={3} mb={4}>
+//       <Grid container spacing={3} justifyContent="center">
+//         <Grid item xs={12} lg={9}>
+//           <Card sx={{ overflow: "visible" }}>
+//             <SuiBox p={2} lineHeight={1}>
+//               {children}
+//             </SuiBox>
+//           </Card>
+//         </Grid>
+//       </Grid>
+//     </SuiBox>
+//   );
+// }
+
+export function WizardBoxWrap({ children, title, description }) {
+	return (
+		<SuiBox mt={3} mb={4}>
+			<Grid container spacing={3} justifyContent="center">
+				<Grid item xs={12} lg={9}>
+					<Card sx={{ overflow: "visible" }}>
+						<SuiBox p={2} lineHeight={1}>
+							{children}
+						</SuiBox>
+					</Card>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+}
+export const SuiInputElement = ({ text, value, onChange }) => {
+	return (
+		<SuiBox
+			display="flex"
+			flexDirection="column"
+			justifyContent="flex-end"
+			height="100%"
+		>
+			<SuiBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
+				<SuiTypography
+					component="label"
+					variant="caption"
+					fontWeight="bold"
+				>
+					{text || ""}
+				</SuiTypography>
+			</SuiBox>
+			<SuiInput onChange={onChange} placeholder={value || ""} />
+		</SuiBox>
+	);
+};
+
+export const SuiTextAreaElement = ({ text, description, value, onChange }) => {
+	return (
+		<TextAreaInput
+			title={text}
+			// description={description}
+			setEditorValue={onChange}
+			editorValue={value}
+		/>
+	);
+};
+export const SuiToggleElement = ({
+	text,
+	description,
+	value,
+	onChange,
+	checked,
+}) => {
+	return (
+		<SuiBox mt={3} mb={2}>
+			<Grid container spacing={3}>
+				<Grid item xs={12} md={6}>
+					<SuiBox
+						mb={1}
+						ml={0.5}
+						lineHeight={0}
+						display="inline-block"
+					>
+						<SuiTypography
+							component="label"
+							variant="caption"
+							fontWeight="bold"
+						>
+							{text}
+						</SuiTypography>
+					</SuiBox>
+					<SuiBox pl={0.5} pb={1.5}>
+						<SuiTypography
+							component="label"
+							variant="caption"
+							fontWeight="regular"
+							color="text"
+						>
+							{description}
+						</SuiTypography>
+					</SuiBox>
+					<SuiBox ml={0.5} mb={0.25}>
+						<Switch onChange={onChange} checked={checked} />
+					</SuiBox>
+				</Grid>
+			</Grid>
+		</SuiBox>
+	);
+};
+
+export const SuiSelectElement = ({
+	text,
+	defaultValue,
+	options,
+	description,
+	value,
+	onChange,
+	checked,
+}) => {
+	return (
+		<SuiBox
+			display="flex"
+			flexDirection="column"
+			justifyContent="flex-end"
+			height="100%"
+		>
+			<SuiBox
+				mb={1}
+				ml={0.5}
+				mt={3}
+				lineHeight={0}
+				display="inline-block"
+			>
+				<SuiTypography
+					component="label"
+					variant="caption"
+					fontWeight="bold"
+				>
+					{text}
+				</SuiTypography>
+			</SuiBox>
+			<SuiSelect
+				defaultValue={defaultValue}
+				options={options}
+				onChange={onChange}
+				isMulti
+			/>
+		</SuiBox>
+	);
+};
+
+export const SaveButton = ({ onClick }) => {
+	return (
+		<IconButton sx={navbarIconButton} size="small" onClick={onClick}>
+			<SuiTypography
+				variant="button"
+				fontWeight="medium"
+				color={"dark"} //: "dark"}
+			>
+				Save
+			</SuiTypography>
+		</IconButton>
+	);
+};
+
+export const SuiBoxCardForm = ({ children, title, description }) => {
+	return (
+		<Grid container justifyContent="center" spacing={3}>
+			<Grid item xs={12} lg={8}>
+				<SuiBox mt={6} mb={1} textAlign="center">
+					<SuiBox mb={1}>
+						<SuiTypography variant="h3" fontWeight="bold">
+							{title}
+						</SuiTypography>
+					</SuiBox>
+					<SuiTypography
+						variant="h5"
+						fontWeight="regular"
+						color="secondary"
+					>
+						{description}
+					</SuiTypography>
+				</SuiBox>
+			</Grid>
+			<Grid item xs={12} lg={8}>
+				<SuiBox mb={3}>
+					<Grid container spacing={3}>
+						{children}
+					</Grid>
+				</SuiBox>
+			</Grid>
+		</Grid>
+	);
+};
 export const Sandbox = () => {
 	const controller = {
 		miniSidenav: false,
