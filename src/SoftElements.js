@@ -2167,11 +2167,11 @@ const SuiInputIconBoxRoot = styled("div")(({ theme, ownerState }) => {
 		color: dark.main,
 	};
 });
-const SuiInputOriginal = forwardRef(
+export const SuiInputOriginal = forwardRef(
 	({ controller, size, icon, error, success, disabled, ...rest }, ref) => {
 		let template;
 		//const [controller] = useSoftUIController();
-		const { direction } = controller;
+		const { direction } = "ltr"; //controller;
 		const iconDirection = icon.direction;
 
 		if (icon.component && icon.direction === "left") {
@@ -2255,6 +2255,21 @@ SuiInputOriginal.defaultProps = {
 };
 export const SuiInput = forwardRef(
 	({ inputRef, size, icon, error, success, disabled, ...rest }, ref) => {
+		let template;
+		//const [controller] = useSoftUIController();
+		template = (
+			<SuiInputRoot
+				{...rest}
+				ref={ref}
+				ownerState={{ size, error, success, disabled }}
+			/>
+		);
+		return template;
+	}
+);
+export const SuiInputCore = forwardRef(
+	({ inputRef, size, icon, error, success, disabled, ...rest }, ref) => {
+		console.log({ rest });
 		let template;
 		//const [controller] = useSoftUIController();
 		template = (
@@ -3509,39 +3524,28 @@ export function Basic({ children }) {
 	);
 }
 
-export const DashboardLayout = ({ children }) => {
+export const DashboardLayout = ({ children, controller }) => {
+	console.log({ controller });
+	const { miniSidenav } = controller;
 	return (
-		<PropsContext.Consumer>
-			{({ controller }) => {
-				const { miniSidenav } = controller;
-				return (
-					<SuiBox
-						sx={({
-							breakpoints,
-							transitions,
-							functions: { pxToRem },
-						}) => ({
-							p: 3,
-							position: "relative",
-							[breakpoints.up("xl")]: {
-								marginLeft: miniSidenav
-									? pxToRem(120)
-									: pxToRem(274),
-								transition: transitions.create(
-									["margin-left", "margin-right"],
-									{
-										easing: transitions.easing.easeInOut,
-										duration: transitions.duration.standard,
-									}
-								),
-							},
-						})}
-					>
-						{children}
-					</SuiBox>
-				);
-			}}
-		</PropsContext.Consumer>
+		<SuiBox
+			sx={({ breakpoints, transitions, functions: { pxToRem } }) => ({
+				p: 3,
+				position: "relative",
+				[breakpoints.up("xl")]: {
+					marginLeft: miniSidenav ? pxToRem(120) : pxToRem(274),
+					transition: transitions.create(
+						["margin-left", "margin-right"],
+						{
+							easing: transitions.easing.easeInOut,
+							duration: transitions.duration.standard,
+						}
+					),
+				},
+			})}
+		>
+			{children}
+		</SuiBox>
 	);
 };
 
@@ -4055,7 +4059,6 @@ function PagesHeaderCell({ children }) {
 function PagesBodyCell({ rows, noBorder }) {
 	const { light } = colors;
 	const { borderWidth } = borders;
-
 	const renderRows = rows.map((row) => (
 		<SuiBox
 			key={row}
@@ -4149,11 +4152,42 @@ function PagesBodyCellInput({ noBorder, onClick, onChange, ref }) {
 		</TableRow>
 	);
 }
+
 // Setting default values for the props for PagesBodyCell
 PagesBodyCellInput.defaultProps = {
 	noBorder: false,
 };
+function PagesBodyCellInputForm({ noBorder, onChange, ref }) {
+	const { light } = colors;
+	const { borderWidth } = borders;
 
+	return (
+		<TableRow>
+			<SuiBox
+				component="td"
+				width="100%"
+				textAlign="left"
+				borderBottom={
+					noBorder ? "none" : `${borderWidth[1]} solid ${light.main}`
+				}
+				p={1}
+			>
+				<SuiTypography
+					display="block"
+					variant="button"
+					fontWeight="medium"
+					color="text"
+					sx={{ width: "max-content" }}
+				>
+					<SuiInput onChange={onChange} />
+				</SuiTypography>
+			</SuiBox>
+		</TableRow>
+	);
+}
+PagesBodyCellInputForm.defaultProps = {
+	noBorder: false,
+};
 function PagesBodyCellAddInput({ onSubmit }) {
 	const [inputData, setInputData] = useState({
 		showInput: false,
@@ -4186,6 +4220,84 @@ function PagesBodyCellAddInput({ onSubmit }) {
 					onClick={onSave}
 					ref={textInput}
 				/>
+			) : (
+				<PagesBodyCellAdd onClick={onClickShowHide} />
+			)}
+		</Fragment>
+	);
+}
+function PagesBodyCellAddInputForm({ onSubmit, headers, noBorder }) {
+	const { borderWidth } = borders;
+
+	const [inputData, setInputData] = useState({
+		showInput: false,
+		textValue: _.map(headers, (header) => {
+			return "";
+		}),
+	});
+	const onClickShowHide = (e) => {
+		e.preventDefault();
+		setInputData({ ...inputData, showInput: !inputData.showInput });
+	};
+
+	//get all the textValues
+	const onSave = (e) => {
+		const textValue = inputData.textValue; //e.target.value;
+		onSubmit(textValue);
+		onClickShowHide(e);
+	};
+
+	const renderRows = (
+		<TableRow>
+			{headers.map((header, index) => {
+				const onTextChange = (e) => {
+					const textValue = e.target.value;
+					const currentTextValues = [...inputData["textValue"]];
+					currentTextValues[index] = textValue;
+					setInputData({
+						...inputData,
+						textValue: currentTextValues,
+					});
+				};
+				return (
+					<SuiBox
+						key={index}
+						component="td"
+						width="100%"
+						textAlign="left"
+						// borderBottom={
+						// 	noBorder
+						// 		? "none"
+						// 		: `${borderWidth[1]} solid ${light.main}`
+						// }
+						p={1}
+					>
+						<SuiTypography
+							display="block"
+							variant="button"
+							fontWeight="medium"
+							color="text"
+							sx={{ width: "max-content" }}
+						>
+							<PagesBodyCellInputForm
+								onChange={onTextChange}
+								// ref={textInput}
+							/>
+						</SuiTypography>
+					</SuiBox>
+				);
+			})}
+		</TableRow>
+	);
+
+	return (
+		<Fragment>
+			{inputData.showInput ? (
+				<Fragment>
+					{renderRows}
+
+					<Add onClick={onSave} />
+				</Fragment>
 			) : (
 				<PagesBodyCellAdd onClick={onClickShowHide} />
 			)}
@@ -4247,6 +4359,64 @@ export function SuiTableAdd({ headers, rows, title, onSubmit }) {
 				</TableContainer>
 			</SuiBox>
 		</Card>
+	);
+}
+export function SuiTableAddForm({ headers, rows, title, onSubmit }) {
+	const PageHeaders = (
+		<Fragment>
+			{headers.map((header, index) => {
+				return <PagesHeaderCell key={index}>{header}</PagesHeaderCell>;
+			})}
+		</Fragment>
+	);
+
+	const PageRows = (
+		<Fragment>
+			{rows.map((row, index) => {
+				return <PagesBodyCell key={index} rows={row} />;
+			})}
+		</Fragment>
+	);
+	return (
+		<Fragment>
+			<SuiBox
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SuiTypographyFormTitle text={title} />
+				<Tooltip
+					title="Data is based from sessions and is 100% accurate"
+					placement="left"
+				>
+					<SuiButton
+						variant="outlined"
+						color="white"
+						size="small"
+						circular
+						iconOnly
+					>
+						<Icon sx={{ fontWeight: "bold" }}>done</Icon>
+					</SuiButton>
+				</Tooltip>
+			</SuiBox>
+			<SuiBox py={1}>
+				<TableContainer sx={{ boxShadow: "none" }}>
+					<Table>
+						<SuiBox component="thead">
+							<TableRow>{PageHeaders}</TableRow>
+						</SuiBox>
+						<TableBody>
+							{PageRows}
+							<PagesBodyCellAddInputForm
+								onSubmit={onSubmit}
+								headers={headers}
+							/>
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</SuiBox>
+		</Fragment>
 	);
 }
 
@@ -5351,6 +5521,26 @@ export const NewProjectLayOut = ({ children }) => {
 	);
 };
 
+const SuiTypographyFormTitle = ({ text }) => {
+	return (
+		<SuiTypography component="label" variant="caption" fontWeight="bold">
+			{text || ""}
+		</SuiTypography>
+	);
+};
+
+const SuiTypographyFormDescription = ({ text }) => {
+	return (
+		<SuiTypography
+			component="label"
+			variant="caption"
+			fontWeight="regular"
+			color="text"
+		>
+			{text || ""}
+		</SuiTypography>
+	);
+};
 export const TextAreaInput = ({
 	title,
 	description,
@@ -5371,30 +5561,20 @@ export const TextAreaInput = ({
 				lineHeight={0}
 				display="inline-block"
 			>
-				<SuiTypography
-					component="label"
-					variant="caption"
-					fontWeight="bold"
-				>
-					{title || "Project Description"}
-				</SuiTypography>
+				<SuiTypographyFormTitle text={title} />
 			</SuiBox>
-			<SuiBox
-				mb={1.5}
-				ml={0.5}
-				mt={0.5}
-				lineHeight={0}
-				display="inline-block"
-			>
-				<SuiTypography
-					component="label"
-					variant="caption"
-					fontWeight="regular"
-					color="text"
+			{description != null ? (
+				<SuiBox
+					mb={1.5}
+					ml={0.5}
+					mt={0.5}
+					lineHeight={0}
+					display="inline-block"
 				>
-					{description}
-				</SuiTypography>
-			</SuiBox>
+					<SuiTypographyFormDescription text={description} />
+				</SuiBox>
+			) : null}
+
 			<SuiEditor value={editorValue} onChange={setEditorValue} />
 		</SuiBox>
 	);
@@ -7239,13 +7419,7 @@ export const SuiInputElement = ({ text, value, onChange }) => {
 			height="100%"
 		>
 			<SuiBox mb={1} ml={0.5} lineHeight={0} display="inline-block">
-				<SuiTypography
-					component="label"
-					variant="caption"
-					fontWeight="bold"
-				>
-					{text || ""}
-				</SuiTypography>
+				<SuiTypographyFormTitle text={text} />
 			</SuiBox>
 			<SuiInput onChange={onChange} placeholder={value || ""} />
 		</SuiBox>
@@ -7262,7 +7436,7 @@ export const SuiTextAreaElement = ({ text, description, value, onChange }) => {
 		/>
 	);
 };
-export const SuiToggleElement = ({
+export const SuiToggleElementOld = ({
 	text,
 	description,
 	value,
@@ -7287,16 +7461,19 @@ export const SuiToggleElement = ({
 							{text}
 						</SuiTypography>
 					</SuiBox>
-					<SuiBox pl={0.5} pb={1.5}>
-						<SuiTypography
-							component="label"
-							variant="caption"
-							fontWeight="regular"
-							color="text"
-						>
-							{description}
-						</SuiTypography>
-					</SuiBox>
+					{description != null ? (
+						<SuiBox pl={0.5} pb={1.5}>
+							<SuiTypography
+								component="label"
+								variant="caption"
+								fontWeight="regular"
+								color="text"
+							>
+								{description}
+							</SuiTypography>
+						</SuiBox>
+					) : null}
+
 					<SuiBox ml={0.5} mb={0.25}>
 						<Switch onChange={onChange} checked={checked} />
 					</SuiBox>
@@ -7306,6 +7483,29 @@ export const SuiToggleElement = ({
 	);
 };
 
+export const SuiToggleElement = ({
+	text,
+	description,
+	value,
+	onChange,
+	checked,
+}) => {
+	return (
+		<SuiBox
+			display="flex"
+			justifyContent="space-between"
+			alignItems="center"
+			mb={2}
+			lineHeight={1}
+		>
+			<SuiTypographyFormTitle text={text} />
+
+			<SuiBox ml={2} mr={1}>
+				<Switch onChange={onChange} checked={checked} />
+			</SuiBox>
+		</SuiBox>
+	);
+};
 export const SuiSelectElement = ({
 	text,
 	defaultValue,
@@ -7329,13 +7529,7 @@ export const SuiSelectElement = ({
 				lineHeight={0}
 				display="inline-block"
 			>
-				<SuiTypography
-					component="label"
-					variant="caption"
-					fontWeight="bold"
-				>
-					{text}
-				</SuiTypography>
+				<SuiTypographyFormTitle text={text} />
 			</SuiBox>
 			<SuiSelect
 				defaultValue={defaultValue}
@@ -7389,6 +7583,433 @@ export const SuiBoxCardForm = ({ children, title, description }) => {
 			</Grid>
 		</Grid>
 	);
+};
+export const SuiBackSendButtonOld = ({
+	activeStep,
+	handleBack,
+	handleNext,
+	isLastStep,
+}) => {
+	return (
+		<SuiBox
+			mt={4}
+			width="100%"
+			display="flex"
+			justifyContent="space-between"
+		>
+			{activeStep === 0 ? (
+				<SuiBox />
+			) : (
+				<SuiButton
+					variant="gradient"
+					color="light"
+					onClick={handleBack}
+				>
+					back
+				</SuiButton>
+			)}
+			<SuiButton
+				variant="gradient"
+				color="dark"
+				onClick={!isLastStep ? handleNext : undefined}
+			>
+				{isLastStep ? "send" : "next"}
+			</SuiButton>
+		</SuiBox>
+	);
+};
+export const SuiSendNextButton = ({
+	activeStep,
+	handleBack,
+	handleNext,
+	isLastStep,
+}) => {
+	return (
+		<SuiBox mt={4}>
+			<SuiButton
+				variant="gradient"
+				color="dark"
+				onClick={!isLastStep ? handleNext : undefined}
+			>
+				{isLastStep ? "send" : "next"}
+			</SuiButton>
+		</SuiBox>
+	);
+};
+
+export const SuiBackNextButton = ({
+	activeStep,
+	handleBack,
+	handleNext,
+	isLastStep,
+	handleSubmit,
+}) => {
+	return (
+		<SuiBox
+			mt={3}
+			width="100%"
+			display="flex"
+			justifyContent="space-between"
+		>
+			{activeStep === 0 ? (
+				<SuiBox />
+			) : (
+				<SuiButton
+					variant="gradient"
+					color="light"
+					onClick={handleBack}
+				>
+					back
+				</SuiButton>
+			)}
+			<SuiButton
+				variant="gradient"
+				color="dark"
+				onClick={!isLastStep ? handleNext : handleSubmit}
+			>
+				{isLastStep ? "send" : "next"}
+			</SuiButton>
+		</SuiBox>
+	);
+};
+
+export const SuiBackSendButton = ({
+	activeStep,
+	handleBack,
+	handleNext,
+	isLastStep,
+	handleSubmit,
+}) => {
+	return (
+		<Fragment>
+			{activeStep === 0 ? (
+				<SuiSendNextButton
+					handleNext={handleNext}
+					isLastStep={isLastStep}
+				/>
+			) : (
+				<SuiBackNextButton
+					handleNext={handleNext}
+					isLastStep={isLastStep}
+					activeStep={activeStep}
+					handleBack={handleBack}
+					handleSubmit={handleSubmit}
+				/>
+			)}
+		</Fragment>
+	);
+};
+
+export function CoverLayoutOriginal({
+	color,
+	header,
+	title,
+	description,
+	image,
+	top,
+	children,
+}) {
+	return (
+		<PageLayout background="white">
+			<Grid
+				container
+				justifyContent="center"
+				sx={{
+					minHeight: "75vh",
+					margin: 0,
+				}}
+			>
+				<Grid item xs={11} sm={8} md={5} xl={3}>
+					<SuiBox mt={top}>
+						<SuiBox pt={3} px={3}>
+							{!header ? (
+								<>
+									<SuiBox mb={1}>
+										<SuiTypography
+											variant="h3"
+											fontWeight="bold"
+											color={color}
+											textGradient
+										>
+											{title}
+										</SuiTypography>
+									</SuiBox>
+									<SuiTypography
+										variant="body2"
+										fontWeight="regular"
+										color="text"
+									>
+										{description}
+									</SuiTypography>
+								</>
+							) : (
+								header
+							)}
+						</SuiBox>
+						<SuiBox p={3}>{children}</SuiBox>
+					</SuiBox>
+				</Grid>
+				<Grid item xs={12} md={5}>
+					<SuiBox
+						height="100%"
+						display={{ xs: "none", md: "block" }}
+						position="relative"
+						right={{ md: "-12rem", xl: "-16rem" }}
+						mr={-16}
+						sx={{
+							transform: "skewX(-10deg)",
+							overflow: "hidden",
+							borderBottomLeftRadius: ({
+								borders: { borderRadius },
+							}) => borderRadius.lg,
+						}}
+					>
+						<SuiBox
+							ml={-8}
+							height="100%"
+							sx={{
+								backgroundImage: `url(${image})`,
+								backgroundSize: "cover",
+								transform: "skewX(10deg)",
+							}}
+						/>
+					</SuiBox>
+				</Grid>
+			</Grid>
+			<Footer />
+		</PageLayout>
+	);
+}
+export function CoverLayout({
+	color,
+	header,
+	title,
+	description,
+	image,
+	top,
+	children,
+}) {
+	return (
+		<Grid
+			container
+			justifyContent="center"
+			sx={{
+				minHeight: "75vh",
+				margin: 0,
+			}}
+		>
+			<Grid item xs={11} sm={8} md={5} xl={3}>
+				<SuiBox mt={top}>
+					<SuiBox pt={3} px={3}>
+						<SuiBox mb={1}>
+							<SuiTypography
+								variant="h3"
+								fontWeight="bold"
+								color={color}
+								textGradient
+							>
+								{title}
+							</SuiTypography>
+						</SuiBox>
+						<SuiTypography
+							variant="body2"
+							fontWeight="regular"
+							color="text"
+						>
+							{description}
+						</SuiTypography>
+					</SuiBox>
+					<SuiBox p={3}>{children}</SuiBox>
+				</SuiBox>
+			</Grid>
+			<Grid item xs={12} md={5}>
+				<SuiBox
+					height="100%"
+					display={{ xs: "none", md: "block" }}
+					position="relative"
+					right={{ md: "-12rem", xl: "-16rem" }}
+					mr={-16}
+					sx={{
+						transform: "skewX(-10deg)",
+						overflow: "hidden",
+						borderBottomLeftRadius: ({
+							borders: { borderRadius },
+						}) => borderRadius.lg,
+					}}
+				>
+					<SuiBox
+						ml={-8}
+						height="100%"
+						sx={{
+							backgroundImage: `url(${image})`,
+							backgroundSize: "cover",
+							transform: "skewX(10deg)",
+						}}
+					/>
+				</SuiBox>
+			</Grid>
+		</Grid>
+	);
+}
+
+export const SuiInputHook = ({ configDict, pageData, setPageData }) => {
+	const onChange = (e) => {
+		const textValue = e.target.value;
+		const elementID = configDict["id"];
+		var newDict = {};
+		newDict[elementID] = textValue;
+		const updatedPageData = { ...pageData, ...newDict };
+
+		setPageData(updatedPageData);
+	};
+	return (
+		<SuiInputElement
+			text={configDict["text"]}
+			value={configDict["value"]}
+			onChange={onChange}
+		/>
+	);
+};
+
+export const SuiTextAreaHook = ({ configDict, pageData, setPageData }) => {
+	const onChange = (value) => {
+		const elementID = configDict["id"];
+		var newDict = {};
+		newDict[elementID] = value;
+		const updatedPageData = { ...pageData, ...newDict };
+		setPageData(updatedPageData);
+	};
+
+	const value =
+		pageData[configDict["id"]] == undefined
+			? ""
+			: pageData[configDict["id"]];
+	return (
+		<SuiTextAreaElement
+			{...configDict}
+			// text={configDict["text"]}
+			// value={configDict["value"]}
+			value={value}
+			onChange={onChange}
+		/>
+	);
+};
+
+export const SuiTableHook = ({ configDict, pageData, setPageData }) => {
+	const rows =
+		pageData[configDict["id"]] == undefined
+			? [[]]
+			: pageData[configDict["id"]];
+	const onSubmit = (value) => {
+		const newRows = [...rows, value];
+		const elementID = configDict["id"];
+		var newDict = {};
+		newDict[elementID] = newRows;
+		const updatedPageData = { ...pageData, ...newDict };
+		setPageData(updatedPageData);
+	};
+
+	const headers = configDict["value"].split(","); //["a"];
+	return (
+		<SuiTableAddForm
+			{...configDict}
+			// text={configDict["text"]}
+			// value={configDict["value"]}
+			headers={headers}
+			rows={rows}
+			title={configDict["text"]}
+			// value={value}
+			onSubmit={onSubmit}
+		/>
+	);
+};
+
+export const SuiTableHookSingle = ({ configDict, pageData, setPageData }) => {
+	const rows =
+		pageData[configDict["id"]] == undefined
+			? [[]]
+			: pageData[configDict["id"]];
+	const onSubmit = (value) => {
+		const newRows = [...rows, [value]];
+		const elementID = configDict["id"];
+		var newDict = {};
+		newDict[elementID] = newRows;
+		const updatedPageData = { ...pageData, ...newDict };
+		setPageData(updatedPageData);
+	};
+
+	const headers = configDict["value"].split(","); //["a"];
+	return (
+		<SuiTableAddForm
+			{...configDict}
+			// text={configDict["text"]}
+			// value={configDict["value"]}
+			headers={headers}
+			rows={rows}
+			title={configDict["text"]}
+			// value={value}
+			onSubmit={onSubmit}
+		/>
+	);
+};
+export const SuiToggleHook = ({ configDict, pageData, setPageData }) => {
+	const onChange = (e) => {
+		const elementID = configDict["id"];
+		const previous_state =
+			pageData[elementID] == undefined
+				? String(configDict["value"]).toLowerCase() == "true"
+				: pageData[elementID];
+		var newDict = {};
+		newDict[elementID] = !previous_state;
+		const updatedPageData = { ...pageData, ...newDict };
+		setPageData(updatedPageData);
+	};
+
+	const checked =
+		pageData[configDict["id"]] == undefined
+			? String(configDict["value"]).toLowerCase() == "true"
+			: pageData[configDict["id"]];
+	return (
+		<SuiToggleElement
+			{...configDict}
+			// text={configDict["text"]}
+			// value={configDict["value"]}
+			checked={checked}
+			onChange={onChange}
+		/>
+	);
+};
+
+const selectOptionsCreateFromList = (l) => {
+	return _.map(l.split(","), (i) => {
+		return { label: i, value: i };
+	});
+};
+export const SuiSelectHook = ({ configDict, pageData, setPageData }) => {
+	const onChange = (value) => {
+		console.log({ value });
+		const elementID = configDict["id"];
+		var newDict = {};
+		newDict[elementID] = value;
+		const updatedPageData = { ...pageData, ...newDict };
+		setPageData(updatedPageData);
+	};
+
+	const defaultValue = [];
+	const options = selectOptionsCreateFromList(configDict["value"]);
+
+	return (
+		<SuiSelectElement
+			{...configDict}
+			defaultValue={defaultValue}
+			options={options}
+			onChange={onChange}
+		/>
+	);
+};
+
+export const SuiDateHook = () => {
+	return <Fragment>date</Fragment>;
 };
 export const Sandbox = () => {
 	const controller = {

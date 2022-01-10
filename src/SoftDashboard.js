@@ -169,7 +169,7 @@ const Dashboard = ({ controller }) => {
 	];
 	return (
 		<Fragment>
-			<DashboardLayout>
+			<DashboardLayout controller={controller}>
 				<SuiBox pt={3}>
 					<SuiBox mb={3}>
 						<AutomotiveDetails />
